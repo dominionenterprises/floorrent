@@ -1,0 +1,43 @@
+body {
+  margin: 0px 0px 0px 0px;
+}
+
+.header {
+	background-color: #014876;
+	height: 65px;
+	width: 100%;
+	position: absolute;
+}
+
+.menu {
+	background-color: #DCDCDC;
+	height: 100%;
+	width: 20%;
+	display: inline-block;
+	margin: 65px 0 0 0;
+	position: absolute;
+}
+
+.fixtures {
+	height: 150px;
+	width: 90%;
+	background-color: #E7E7E7;
+	overflow-y: scroll;
+	margin: auto;
+	margin-top: 25px;
+	direction: rtl;
+	text-align: left;
+}
+
+.furniture {
+	height: 150px;
+	width: 90%;
+	background-color: #E7E7E7;
+	overflow-y: scroll;
+	margin: auto;
+	margin-top: 25px;
+	direction: rtl;
+	text-align: left;
+}
+
+
