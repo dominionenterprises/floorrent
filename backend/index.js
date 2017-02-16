@@ -8,6 +8,6 @@ server.listen(port);
 var path = require('path');
 
 app.get('/', function (req, res) {
-  res.sendFile(path.resolve(__dirname + '/frontend/index.html'));
+  res.sendFile(path.resolve(__dirname + '/../frontend/index.html'));
 });
 
