@@ -4,6 +4,7 @@
   "description": "DE Hack U 5 Student Repository",
   "main": "backend/index.js",
   "dependencies": {
+    "body-parser": "^1.16.1",
     "express": "^4.14.1"
   },
   "devDependencies": {},
