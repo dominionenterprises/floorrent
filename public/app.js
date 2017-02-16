@@ -1,64 +1,81 @@
 "use strict";
 
-var canvas = new fabric.Canvas('c', {selection:false});
-var wrapper = document.getElementById('canvasWrapper');
-var grid = 25;
-var gridSize = 800;
-var vertexRadius = 7;
-var useGrid = true;
-const ORANGE = '#ec7200';
-
-var startLine = false;
-var startVertex;
-var tempLineStartX = 0, tempLineStartY = 0;
-var tempLine = new fabric.Line([0, 0, 0, 0,], {
-    stroke: '#ddd',
-    selectable: false
+var canvas = new fabric.Canvas('c', {
+  selection: false,
+  preserveObjectStacking: true
 });
 
 var vertices = [];
 var edges = [];
 
+var wrapper = document.getElementById('canvasWrapper');
+var grid = 25;
+var gridSize = 800;
+var vertexRadius = 10;
+var useGrid = true;
+const ORANGE = '#ec7200';
+
+var edgeId = 0, vertexId = 0;
+
+var showTempLine = false;
+var tempLineStartVertex;
+var tempLine = new fabric.Line([0, 0, 0, 0,], {
+    stroke: '#ddd',
+    selectable: false
+});
+
 function Vertex(x, y) {
-  this.circle = new fabric.Circle({
+  var circle = new fabric.Circle({
     left: x-vertexRadius,
     top: y-vertexRadius,
     radius: vertexRadius,
     stroke: ORANGE,
     strokeWidth: 1,
     fill: ORANGE,
-    hasControls: false
+    hasControls: false,
+    id: vertexId++,
+    edges: []  
   });
-  this.edges = [];
-  this.vertices = [];
-  vertices.push(this);
-  canvas.add(this.circle);
+
+  vertices.push(circle);
+  canvas.add(circle);
+  return circle;
 }
 
 function Edge(v1, v2) {
   // get grid-snapped coordinates
-  var x1 = roundToGrid(v1.circle.left + vertexRadius);
-  var y1 = roundToGrid(v1.circle.top + vertexRadius);
-  var x2 = roundToGrid(v2.circle.left + vertexRadius);
-  var y2 = roundToGrid(v2.circle.top + vertexRadius);
+  var x1 = roundToGrid(v1.left + vertexRadius);
+  var y1 = roundToGrid(v1.top + vertexRadius);
+  var x2 = roundToGrid(v2.left + vertexRadius);
+  var y2 = roundToGrid(v2.top + vertexRadius);
   
-  this.line = new fabric.Line([x1, y1, x2, y2], {
+  var line = new fabric.Line([x1, y1, x2, y2], {
     stroke: '#aaa',
-    selectable: false
+    selectable: false,
+    id: edgeId++,
+    vertices: [v1, v2],
   });
-  this.vertices = [v1, v2];
-  edges.push(this);
-  v1.vertices.push(this);
-  v2.vertices.push(this);
-  canvas.add(this.line);
+  edges.push(line);
+  v1.edges.push(line);
+  v2.edges.push(line);
+  canvas.add(line);
+
+  return line;
 }
 
 function roundToGrid(n) {
   return Math.round(n / grid) * grid;
 }
 
+// start temp line from vertex
+function startTempLine(vert) {
+  tempLineStartVertex = vert;
+  showTempLine = true;
+  canvas.add(tempLine);
+}
+
 function clearTempLine() {
-  startLine = false;
+  showTempLine = false;
   tempLine.set({x1: 0, y1: 0, x2: 0, y2: 0});
   tempLine.setCoords();
   canvas.renderAll();
@@ -66,8 +83,11 @@ function clearTempLine() {
 
 // create grid
 for (var i = 0; i <= (gridSize/grid); i++) {
-  canvas.add(new fabric.Line([i*grid, 0, i*grid, gridSize], { stroke: '#eee', selectable: false}));
-  canvas.add(new fabric.Line([0, i*grid, gridSize, i*grid], { stroke: '#eee', selectable: false}));
+  var column = new fabric.Line([i*grid, 0, i*grid, gridSize], { stroke: '#eee', selectable: false});
+  canvas.add(column);
+
+  var row = new fabric.Line([0, i*grid, gridSize, i*grid], { stroke: '#eee', selectable: false});
+  canvas.add(row);
 }
 
 // add some lines
@@ -86,27 +106,38 @@ canvas.on('mouse:down', function(options) {
     console.log('creating vertex at ' + x + ', ' + y);
 
     var vert = new Vertex(x, y);
-    if (startLine) {
+    if (showTempLine) {
       clearTempLine();
-      var edge = new Edge(startVertex, vert);
+      var edge = new Edge(tempLineStartVertex, vert);
     }
+    canvas.setActiveObject(vert);
+  }
+});
 
-    // start a new line immediately
-    tempLineStartX = x;
-    tempLineStartY = y;
-    startLine = true;
-    canvas.add(tempLine);
-    startVertex = vert;
+canvas.on('object:selected', function(options) {
+  // check for vertex...lol
+  if (options.target.fill === ORANGE) {
+    if (showTempLine) {
+      // check for vertex... lol
+      if (options.target.fill === ORANGE) {
+        var vert = options.target;
+        var edge = new Edge(tempLineStartVertex, vert);
+        clearTempLine();
+        canvas.setActiveObject(vert);
+      }
+    } else {
+      // start temp line from target
+      startTempLine(options.target);
+    }
   }
 
-  return false;
 });
 
 canvas.on('mouse:move', function(options) {
-  if (startLine) {
+  if (showTempLine) {
     tempLine.set({
-      x1: tempLineStartX,
-      y1: tempLineStartY,
+      x1: tempLineStartVertex.left + vertexRadius,
+      y1: tempLineStartVertex.top + vertexRadius,
       x2: options.e.offsetX,
       y2: options.e.offsetY
     });
@@ -122,3 +153,4 @@ wrapper.addEventListener('keydown', function(e) {
   }
   return false;
 });
+
