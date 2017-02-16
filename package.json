@@ -4,8 +4,10 @@
   "description": "DE Hack U 5 Student Repository",
   "main": "backend/index.js",
   "dependencies": {
+    "bcrypt": "^1.0.2",
     "body-parser": "^1.16.1",
-    "express": "^4.14.1"
+    "express": "^4.14.1",
+    "pg": "^6.1.2"
   },
   "devDependencies": {},
   "scripts": {
