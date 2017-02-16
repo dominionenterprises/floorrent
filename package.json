@@ -2,14 +2,14 @@
   "name": "wm-brainstorm",
   "version": "1.0.0",
   "description": "DE Hack U 5 Student Repository",
-  "main": "index.js",
+  "main": "backend/index.js",
   "dependencies": {
     "express": "^4.14.1"
   },
   "devDependencies": {},
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node index.js"
+    "start": "node backend/index.js"
   },
   "repository": {
     "type": "git",
