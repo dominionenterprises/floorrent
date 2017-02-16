@@ -24,6 +24,50 @@ var tempLine = new fabric.Line([0, 0, 0, 0,], {
     selectable: false
 });
 
+function View2Model() {
+  return edges.map(function(e) {
+    return {
+      x1: e.x1,
+      x2: e.x2,
+      y1: e.y1,
+      y2: e.y2
+    }
+  });
+}
+
+function Model2View(model) {
+  var vs = []
+  var es = []
+  var seenVertices = {};
+  for (var i = 0; i < model.length; i++) {
+    var e = model[i];
+    var v1 = new Vertex(e.x1, e.y1);
+    var v2 = new Vertex(e.x2, e.y2);
+    var edge = new Edge(v1, v2);
+    es.push(edge);
+    var v1Hash = [e.x1, e.y1].join(',');
+    if (!(v1Hash in seenVertices)) {
+      vs.push(v1);
+      seenVertices[v1Hash] = true;
+    }
+    var v2Hash = [e.x2, e.y2].join(',');
+    if (!(v2Hash in seenVertices)) {
+      vs.push(v2)
+      seenVertices[v2Hash] = true;
+    }
+  }
+  return {
+    vertices: vs,
+    edges: es
+  };
+}
+
+function createVertex(x, y) {
+  var vert = new Vertex(x, y);
+  vertices.push(vert);
+  return vert;
+}
+
 function Vertex(x, y) {
   var circle = new fabric.Circle({
     left: x-vertexRadius,
@@ -34,12 +78,16 @@ function Vertex(x, y) {
     fill: ORANGE,
     hasControls: false,
     id: vertexId++,
-    edges: []  
+    edges: []
   });
 
-  vertices.push(circle);
   canvas.add(circle);
   return circle;
+}
+
+function createEdge(v1, v2) {
+  var edge = new Edge(v1, v2);
+  edges.push(edge);
 }
 
 function Edge(v1, v2) {
@@ -48,18 +96,17 @@ function Edge(v1, v2) {
   var y1 = roundToGrid(v1.top + vertexRadius);
   var x2 = roundToGrid(v2.left + vertexRadius);
   var y2 = roundToGrid(v2.top + vertexRadius);
-  
+
   var line = new fabric.Line([x1, y1, x2, y2], {
     stroke: '#aaa',
     selectable: false,
     id: edgeId++,
     vertices: [v1, v2],
   });
-  edges.push(line);
+
   v1.edges.push(line);
   v2.edges.push(line);
   canvas.add(line);
-
   return line;
 }
 
@@ -105,10 +152,10 @@ canvas.on('mouse:down', function(options) {
     console.log(options);
     console.log('creating vertex at ' + x + ', ' + y);
 
-    var vert = new Vertex(x, y);
+    var vert = createVertex(x, y);
     if (showTempLine) {
       clearTempLine();
-      var edge = new Edge(tempLineStartVertex, vert);
+      createEdge(tempLineStartVertex, vert);
     }
     canvas.setActiveObject(vert);
   }
@@ -121,7 +168,7 @@ canvas.on('object:selected', function(options) {
       // check for vertex... lol
       if (options.target.fill === ORANGE) {
         var vert = options.target;
-        var edge = new Edge(tempLineStartVertex, vert);
+        var edge = createEdge(tempLineStartVertex, vert);
         clearTempLine();
         canvas.setActiveObject(vert);
       }
