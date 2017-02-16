@@ -223,10 +223,10 @@ app.get("/layout", function(req, res){
       return console.error('error fetching client from pool', err);
     }
     if (creator){
-      query = "SELECT * FROM floorplans WHERE creator=$1";
+      query = "SELECT * FROM layouts WHERE creator=$1";
       params = [creator];
     } else {
-      query = "SELECT * FROM floorplans";
+      query = "SELECT * FROM layouts";
       params = [];
     }
     client.query(query, params, function(err, result) {
@@ -234,7 +234,7 @@ app.get("/layout", function(req, res){
         return console.error('error running query', err);
       }
       if (result.rows.length == 0){
-        res.send({status:400, message: "No floorplans found"});
+        res.send({status:400, message: "No layouts found"});
         return;
       }
       res.send(result.rows);
