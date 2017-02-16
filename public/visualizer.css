@@ -2,6 +2,7 @@
 
 body {
   margin: 0px 0px 0px 0px;
+  height: 100%;
   font-family: 'Roboto', sans-serif;
 }
 
@@ -14,31 +15,38 @@ body {
 
 .menu {
 	background-color: #DCDCDC;
-	height: 100%;
-	width: 20%;
+	height: 93vh;
+	width: 296px;
 	display: inline-block;
 	margin: 65px 0 0 0;
 	position: absolute;
+
 }
 
-.fixtures {
+.icon-box-label {
+	text-align: center;
+	margin: 20px 0 0 0;
+}
+
+
+.fixtures-box {
 	height: 150px;
 	width: 90%;
 	background-color: #E7E7E7;
 	overflow-y: scroll;
 	margin: auto;
-	margin-top: 25px;
+	margin-top: 5px;
 	direction: rtl;
 	text-align: left;
 }
 
-.furniture {
+.furniture-box {
 	height: 150px;
 	width: 90%;
 	background-color: #E7E7E7;
 	overflow-y: scroll;
 	margin: auto;
-	margin-top: 25px;
+	margin-top: 5px;
 	direction: rtl;
 	text-align: left;
 }
@@ -151,4 +159,84 @@ body {
   transition: .25s ease opacity;
 }
 
+.icon {
+	margin: 10 25 10 25;
+	display: inline-block;
+	position: relative;
+	text-align: center;
+	width: 70px;
+	/*height: 120px;*/
+
+}
+
+.icon-row {
+	min-height: 150px;
+	display: flex;
+	align-items: center;
+}
+
+.icon-text {
+	margin: 0 0 4px 0;
+
+}
+
+.icon-image {
+	max-width: 70px;
+	max-height: 126px;
+}
+
+
+h1 {
+	font-family: "Trebuchet MS", "Lucida Grande", "Lucida Sans Unicode", "Lucida Sans", Tahoma, sans-serif;
+	font-size: 24px;
+	font-style: normal;
+	font-variant: normal;
+	font-weight: 500;
+	line-height: 26.4px;
+}
+h2 {
+	font-family: "Trebuchet MS", "Lucida Grande", "Lucida Sans Unicode", "Lucida Sans", Tahoma, sans-serif;
+	font-size: 20px;
+	font-style: normal;
+	font-variant: normal;
+	font-weight: 500;
+	line-height: 20.4px;
+}
+h3 {
+	font-family: "Trebuchet MS", "Lucida Grande", "Lucida Sans Unicode", "Lucida Sans", Tahoma, sans-serif;
+	font-size: 14px;
+	font-style: normal;
+	font-variant: normal;
+	font-weight: 500;
+	line-height: 15.4px;
+}
+p {
+	font-family: "Trebuchet MS", "Lucida Grande", "Lucida Sans Unicode", "Lucida Sans", Tahoma, sans-serif;
+	font-size: 12px;
+	font-style: normal;
+	font-variant: normal;
+	font-weight: 400;
+	line-height: 20px;
+}
+blockquote {
+	font-family: "Trebuchet MS", "Lucida Grande", "Lucida Sans Unicode", "Lucida Sans", Tahoma, sans-serif;
+	font-size: 21px;
+	font-style: normal;
+	font-variant: normal;
+	font-weight: 400;
+	line-height: 30px;
+}
+pre {
+	font-family: "Trebuchet MS", "Lucida Grande", "Lucida Sans Unicode", "Lucida Sans", Tahoma, sans-serif;
+	font-size: 13px;
+	font-style: normal;
+	font-variant: normal;
+	font-weight: 400;
+	line-height: 18.5714px;
+}
+
+ /* This text is in Trebuchet MS */
+.class { 
+	font-family: Trebuchet MS,Lucida Grande,Lucida Sans Unicode,Lucida Sans,Tahoma,sans-serif; 
+}
 
