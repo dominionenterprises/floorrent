@@ -32,6 +32,8 @@ app.get('/', function (req, res) {
   res.sendFile(path.resolve(__dirname + '/frontend/index.html'));
 });
 
+
+/* User Resource */
 app.post("/login", function(req, res){
   username = req.body.username;
   password = req.body.password;
@@ -49,9 +51,10 @@ app.post("/login", function(req, res){
       }
       hashedPass = result.rows[0].password;
       access = result.rows[0].access;
+      uuid = result.rows[0].uuid;
       bcrypt.compare(password, hashedPass, function(err, result) {
         if (result){
-          res.send({status:200, message:{access:access}})
+          res.send({status:200, message:{access:access, uuid:id}})
         } else {
           res.send({status:403, message:"Incorrect password"});
         }
@@ -94,4 +97,199 @@ app.post("/register", function(req, res){
   });
 });
 
+
+/* Floorplan Resource */
+app.get("/floorplan/:id/", function(req, res){
+  id = parseInt(req.params.id);
+  pool.connect(function(err, client, done) {
+    if(err) {
+      return console.error('error fetching client from pool', err);
+    }
+    client.query("SELECT * FROM floorplans WHERE fpid=$1", [id], function(err, result) {
+      if(err) {
+        return console.error('error running query', err);
+      }
+      if (result.rows.length != 1){
+        res.send({status:400, message: "Floorplan ID " + id.toString() + " not found"});
+        return;
+      }
+      res.send(result.rows[0]);
+    });
+  });
+});
+
+app.get("/floorplan", function(req, res){
+  creator = parseInt(req.query.creator);
+  pool.connect(function(err, client, done) {
+    if(err) {
+      return console.error('error fetching client from pool', err);
+    }
+    if (creator){
+      query = "SELECT * FROM floorplans WHERE creator=$1";
+      params = [creator];
+    } else {
+      query = "SELECT * FROM floorplans";
+      params = [];
+    }
+    client.query(query, params, function(err, result) {
+      if(err) {
+        return console.error('error running query', err);
+      }
+      if (result.rows.length == 0){
+        res.send({status:400, message: "No floorplans found"});
+        return;
+      }
+      res.send(result.rows);
+    });
+  });
+});
+
+app.post("/floorplan/", function(req, res){
+  creator = req.body.creator;
+  pool.connect(function(err, client, done) {
+    if(err) {
+      return console.error('error fetching client from pool', err);
+    }
+    client.query("INSERT INTO floorplans (fpid, creator) VALUES(DEFAULT, $1) RETURNING fpid", [creator], function(err, result) {
+      if(err) {
+        return console.error('error running query', err);
+      }
+      res.send(result.rows[0]);
+    });
+  });
+});
+
+app.post("/floorplan/:id", function(req, res){
+  content = req.body.content;
+  id = parseInt(req.params.id);
+  pool.connect(function(err, client, done) {
+    if(err) {
+      return console.error('error fetching client from pool', err);
+    }
+    client.query("UPDATE floorplans SET content=$1 WHERE fpid=$2", [content, id], function(err, result) {
+      if(err) {
+        return console.error('error running query', err);
+      }
+      res.send(result);
+    });
+  });
+});
+
+app.delete("/floorplan/:id", function(req, res){
+  uuid = req.body.uuid;
+  id = parseInt(req.params.id);
+  pool.connect(function(err, client, done) {
+    if(err) {
+      return console.error('error fetching client from pool', err);
+    }
+    client.query("WITH a AS (DELETE FROM floorplans WHERE fpid=$1 AND creator=$2 returning 1) SELECT COUNT(*) from a", [id, uuid], function(err, result) {
+      if(err) {
+        return console.error('error running query', err);
+      }
+      if (result.rows[0].count != "0"){
+        res.send({status:200, message:"Delete successful"});
+      } else {
+        res.send({status:403, message:"Delete unsuccessful"});
+      }
+    });
+  });
+});
+
+
+/* Layout Resource*/
+app.get("/layout/:id/", function(req, res){
+  id = parseInt(req.params.id);
+  pool.connect(function(err, client, done) {
+    if(err) {
+      return console.error('error fetching client from pool', err);
+    }
+    client.query("SELECT * FROM layouts WHERE lid=$1", [id], function(err, result) {
+      if(err) {
+        return console.error('error running query', err);
+      }
+      if (result.rows.length != 1){
+        res.send({status:400, message: "Layout ID " + id.toString() + " not found"});
+        return;
+      }
+      res.send(result.rows[0]);
+    });
+  });
+});
+
+app.get("/layout", function(req, res){
+  creator = parseInt(req.query.creator);
+  pool.connect(function(err, client, done) {
+    if(err) {
+      return console.error('error fetching client from pool', err);
+    }
+    if (creator){
+      query = "SELECT * FROM floorplans WHERE creator=$1";
+      params = [creator];
+    } else {
+      query = "SELECT * FROM floorplans";
+      params = [];
+    }
+    client.query(query, params, function(err, result) {
+      if(err) {
+        return console.error('error running query', err);
+      }
+      if (result.rows.length == 0){
+        res.send({status:400, message: "No floorplans found"});
+        return;
+      }
+      res.send(result.rows);
+    });
+  });
+});
+
+app.post("/layout/", function(req, res){
+  creator = req.body.creator;
+  pool.connect(function(err, client, done) {
+    if(err) {
+      return console.error('error fetching client from pool', err);
+    }
+    client.query("INSERT INTO floorplans (fpid, creator) VALUES(DEFAULT, $1) RETURNING fpid", [creator], function(err, result) {
+      if(err) {
+        return console.error('error running query', err);
+      }
+      res.send(result.rows[0]);
+    });
+  });
+});
+
+app.post("/layout/:id", function(req, res){
+  content = req.body.content;
+  id = parseInt(req.params.id);
+  pool.connect(function(err, client, done) {
+    if(err) {
+      return console.error('error fetching client from pool', err);
+    }
+    client.query("UPDATE floorplans SET content=$1 WHERE fpid=$2", [content, id], function(err, result) {
+      if(err) {
+        return console.error('error running query', err);
+      }
+      res.send(result);
+    });
+  });
+});
+
+app.delete("/layout/:id", function(req, res){
+  uuid = req.body.uuid;
+  id = parseInt(req.params.id);
+  pool.connect(function(err, client, done) {
+    if(err) {
+      return console.error('error fetching client from pool', err);
+    }
+    client.query("WITH a AS (DELETE FROM floorplans WHERE fpid=$1 AND creator=$2 returning 1) SELECT COUNT(*) from a", [id, uuid], function(err, result) {
+      if(err) {
+        return console.error('error running query', err);
+      }
+      if (result.rows[0].count != "0"){
+        res.send({status:200, message:"Delete successful"});
+      } else {
+        res.send({status:403, message:"Delete unsuccessful"});
+      }
+    });
+  });
+});
 
