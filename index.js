@@ -10,10 +10,11 @@ var bodyParser = require('body-parser')
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
+// serve static files from public
+app.use(express.static('public'));
+
 var bcrypt = require('bcrypt');
 const saltRounds = 10;
-
-
 
 pg = require('pg');
 pg.defaults.ssl = true;
@@ -27,11 +28,6 @@ config = {
   idleTimeoutMillis: 30000,
 };
 pool = new pg.Pool(config);
-
-app.get('/', function (req, res) {
-  res.sendFile(path.resolve(__dirname + '/frontend/index.html'));
-});
-
 
 /* User Resource */
 app.post("/login", function(req, res){
