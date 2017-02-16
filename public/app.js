@@ -143,19 +143,36 @@ canvas.on('object:selected', function(options) {
 
 });
 
-//function other(vert, edge) {
-//  if (edge.v1) 
-//}
+function other(vert, edge) {
+  return edge.vertices[0].id === vert.id ? edge.vertices[1] : edge.vertices[0];
+}
 
 canvas.on('object:moving', function(options) {
   if (options.target.type === 'Vertex') {
     var vert = options.target;
+    
+    // snap to grid
+    vert.set({
+      left: roundToGrid(vert.left) - vertexRadius,
+      top: roundToGrid(vert.top) - vertexRadius
+    });
 
     // reset lines connected to it
     for (var i = 0; i < vert.edges.length; i++) {
       var edge = vert.edges[i];
+
       // redraw those lines
+      var otherVert = other(vert, edge);
+      edge.set({
+        x1: vert.left + vertexRadius,
+        y1: vert.top + vertexRadius,
+        x2: otherVert.left + vertexRadius,
+        y2: otherVert.top + vertexRadius
+      });
+      edge.setCoords();
     }
+
+    canvas.renderAll();
   }
 });
 
