@@ -7,6 +7,7 @@ var canvas = new fabric.Canvas('c', {
 
 var vertices = [];
 var edges = [];
+var gridLines = [];
 
 var wrapper = document.getElementById('canvasWrapper');
 var grid = 25;
@@ -166,12 +167,33 @@ function clearTempLine() {
 }
 
 // create grid
-for (var i = 0; i <= (gridSize/grid); i++) {
-  var column = new fabric.Line([i*grid, 0, i*grid, gridSize], { stroke: '#eee', selectable: false});
-  canvas.add(column);
+function drawGrid() {
+  for (var i = 0; i <= (gridSize/grid); i++) {
+    var column = new fabric.Line([i*grid, 0, i*grid, gridSize], { stroke: '#eee', selectable: false});
+    canvas.add(column);
+    gridLines.push(column);
+    canvas.sendToBack(column);
 
-  var row = new fabric.Line([0, i*grid, gridSize, i*grid], { stroke: '#eee', selectable: false});
-  canvas.add(row);
+    var row = new fabric.Line([0, i*grid, gridSize, i*grid], { stroke: '#eee', selectable: false});
+    canvas.add(row);
+    gridLines.push(row);
+    canvas.sendToBack(row);
+  }
+}
+drawGrid();
+
+function clearGrid() {
+  for (var i = 0; i < gridLines.length; i++) {
+    gridLines[i].remove();
+  }
+  gridLines = [];
+  canvas.renderAll();
+}
+
+function updateGrid(n) {
+  clearGrid();
+  grid = n;
+  drawGrid();
 }
 
 // add some lines
@@ -285,4 +307,3 @@ wrapper.addEventListener('keydown', function(e) {
   }
   return false;
 });
-
