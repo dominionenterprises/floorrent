@@ -13,16 +13,24 @@ var grid = 25;
 var gridSize = 800;
 var vertexRadius = 10;
 var useGrid = true;
-const ORANGE = '#ec7200';
+var ORANGE = '#ec7200';
 
 var edgeId = 0, vertexId = 0;
+var selected;
 
 var showTempLine = false;
 var tempLineStartVertex;
 var tempLine = new fabric.Line([0, 0, 0, 0,], {
-    stroke: '#ddd',
-    selectable: false
+  stroke: '#ddd',
+  strokeWidth: 3,
+  selectable: false
 });
+
+Math.dist=function(x1,y1,x2,y2){ 
+  if(!x2) x2=0; 
+  if(!y2) y2=0;
+  return Math.sqrt((x2-x1)*(x2-x1)+(y2-y1)*(y2-y1)); 
+}
 
 function Vertex(x, y) {
   var circle = new fabric.Circle({
@@ -34,7 +42,10 @@ function Vertex(x, y) {
     fill: ORANGE,
     hasControls: false,
     id: vertexId++,
-    edges: []  
+    edges: [],
+    type: 'Vertex',
+    opacity: 0,
+    selectable: false
   });
 
   vertices.push(circle);
@@ -51,10 +62,13 @@ function Edge(v1, v2) {
   
   var line = new fabric.Line([x1, y1, x2, y2], {
     stroke: '#aaa',
+    strokeWidth: 3,
     selectable: false,
     id: edgeId++,
     vertices: [v1, v2],
+    type: 'Edge'
   });
+
   edges.push(line);
   v1.edges.push(line);
   v2.edges.push(line);
@@ -115,22 +129,34 @@ canvas.on('mouse:down', function(options) {
 });
 
 canvas.on('object:selected', function(options) {
-  // check for vertex...lol
-  if (options.target.fill === ORANGE) {
+  if (options.target.type === 'Vertex') {
     if (showTempLine) {
-      // check for vertex... lol
-      if (options.target.fill === ORANGE) {
-        var vert = options.target;
-        var edge = new Edge(tempLineStartVertex, vert);
-        clearTempLine();
-        canvas.setActiveObject(vert);
-      }
+      var vert = options.target;
+      var edge = new Edge(tempLineStartVertex, vert);
+      clearTempLine();
+      canvas.setActiveObject(vert);
     } else {
       // start temp line from target
       startTempLine(options.target);
     }
   }
 
+});
+
+//function other(vert, edge) {
+//  if (edge.v1) 
+//}
+
+canvas.on('object:moving', function(options) {
+  if (options.target.type === 'Vertex') {
+    var vert = options.target;
+
+    // reset lines connected to it
+    for (var i = 0; i < vert.edges.length; i++) {
+      var edge = vert.edges[i];
+      // redraw those lines
+    }
+  }
 });
 
 canvas.on('mouse:move', function(options) {
@@ -143,6 +169,24 @@ canvas.on('mouse:move', function(options) {
     });
     tempLine.setCoords();
   }
+
+  // check for vertices to color
+  for (var i = 0; i < vertices.length; i++) {
+    var vert = vertices[i];
+    if (Math.dist(vert.left, vert.top, options.e.offsetX, options.e.offsetY) < 50
+        || canvas.getActiveObject() === vert) {
+      vert.set({
+        opacity: 1,
+        selectable: true
+      });
+    } else {
+      vert.set({
+        opacity: 0,
+        selectable: false
+      });
+    }
+  }
+
   canvas.renderAll();
 });
 
@@ -150,6 +194,7 @@ wrapper.tabIndex = 1000;
 wrapper.addEventListener('keydown', function(e) {
   if (e.key === 'Escape') {
     clearTempLine();
+    canvas.deactivateAll();
   }
   return false;
 });
