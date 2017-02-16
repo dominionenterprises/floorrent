@@ -240,11 +240,12 @@ app.get("/layout", function(req, res){
 
 app.post("/layout/", function(req, res){
   creator = req.body.creator;
+  fpid = req.body.fpid;
   pool.connect(function(err, client, done) {
     if(err) {
       return console.error('error fetching client from pool', err);
     }
-    client.query("INSERT INTO floorplans (fpid, creator) VALUES(DEFAULT, $1) RETURNING fpid", [creator], function(err, result) {
+    client.query("INSERT INTO layouts (lid, creator, fpid) VALUES(DEFAULT, $1, $2) RETURNING lid", [creator, fpid], function(err, result) {
       if(err) {
         return console.error('error running query', err);
       }
@@ -260,7 +261,7 @@ app.post("/layout/:id", function(req, res){
     if(err) {
       return console.error('error fetching client from pool', err);
     }
-    client.query("UPDATE floorplans SET content=$1 WHERE fpid=$2", [content, id], function(err, result) {
+    client.query("UPDATE layouts SET content=$1 WHERE lid=$2", [content, id], function(err, result) {
       if(err) {
         return console.error('error running query', err);
       }
@@ -276,7 +277,7 @@ app.delete("/layout/:id", function(req, res){
     if(err) {
       return console.error('error fetching client from pool', err);
     }
-    client.query("WITH a AS (DELETE FROM floorplans WHERE fpid=$1 AND creator=$2 returning 1) SELECT COUNT(*) from a", [id, uuid], function(err, result) {
+    client.query("WITH a AS (DELETE FROM layouts WHERE lid=$1 AND creator=$2 returning 1) SELECT COUNT(*) from a", [id, uuid], function(err, result) {
       if(err) {
         return console.error('error running query', err);
       }
