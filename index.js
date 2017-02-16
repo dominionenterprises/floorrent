@@ -10,6 +10,12 @@ var bodyParser = require('body-parser')
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
+app.use(function(req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  next();
+});
+
 // serve static files from public
 app.use(express.static('public'));
 
@@ -50,7 +56,7 @@ app.post("/login", function(req, res){
       uuid = result.rows[0].uuid;
       bcrypt.compare(password, hashedPass, function(err, result) {
         if (result){
-          res.send({status:200, message:{access:access, uuid:id}})
+          res.send({status:200, message:{access:access, uuid:uuid}})
         } else {
           res.send({status:403, message:"Incorrect password"});
         }
