@@ -2,7 +2,7 @@
   "name": "wm-brainstorm",
   "version": "1.0.0",
   "description": "DE Hack U 5 Student Repository",
-  "main": "backend/index.js",
+  "main": "index.js",
   "dependencies": {
     "bcrypt": "^1.0.2",
     "body-parser": "^1.16.1",
@@ -12,7 +12,7 @@
   "devDependencies": {},
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node backend/index.js"
+    "start": "node index.js"
   },
   "repository": {
     "type": "git",
