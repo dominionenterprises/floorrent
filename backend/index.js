@@ -11,7 +11,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 app.get('/', function (req, res) {
-  res.sendFile(path.resolve(__dirname + '/../frontend/index.html'));
+  res.sendFile(path.resolve(__dirname + '/frontend/index.html'));
 });
 
 app.post("/login", function(req, res){
