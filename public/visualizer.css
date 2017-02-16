@@ -1,5 +1,8 @@
+@import url('https://fonts.googleapis.com/css?family=Roboto:300,400,700');
+
 body {
   margin: 0px 0px 0px 0px;
+  font-family: 'Roboto', sans-serif;
 }
 
 .header {
@@ -38,6 +41,114 @@ body {
 	margin-top: 25px;
 	direction: rtl;
 	text-align: left;
+}
+
+#main-container {
+  transition: .25s all linear;
+  filter: blur(3px);
+}
+
+#login-sheet {
+  position: fixed;
+  top:0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  text-align: center;
+  transition: .25s all ease;
+}
+
+#login {
+  position: relative;
+  margin: auto;
+  margin-top: 25vh;
+  padding: 50px;
+  width: 40%;
+  background: #E7E7E7;
+  background: rgba(235,235,235,0.85);
+  border-radius: 4px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.25);
+  border: 1px solid rgba(0,0,0,0.1);
+  min-height: 350px;
+}
+
+#login h2{
+  font-weight: 400;
+}
+
+#login h1{
+  font-weight: 300;
+}
+
+#login h3{
+  font-weight: 300;
+  font-size: 24px;
+}
+
+.button {
+  display: inline-block;
+  cursor: pointer;
+  background: #014876;
+  color: white;
+  padding: 10px 20px;
+  border-radius: 4px;
+  width: 100px;
+  margin: 5px;
+  margin-top: 10px;
+  transition: .1s ease all;
+  -moz-user-select: -moz-none;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+.button:hover {
+  background: #1b74af;
+}
+
+#guest-button, #admin-button {
+  padding: 40px 60px;
+  font-size: 24px;
+  font-weight: 100;
+  margin-top: 40px;
+}
+
+.login-inner{
+  display:inline-block;
+  transition: .25s all linear;
+  width: 49%;
+  vertical-align: top;
+}
+
+.login-inner input{
+  display:inline-block;
+  width: 85%;
+  padding: 10px 10px;
+  margin-bottom: 5px;
+  font-size: 20px;
+  font-weight: 300;
+  border-radius: 2px;
+  border: none;
+}
+
+#hidden-input {
+  opacity: 0;
+}
+
+#login-2 {
+  border-left: 1px solid #ccc;
+}
+
+#admin-container {
+  position: absolute;
+  margin-right: 50px;
+  top: 125px;
+  opacity: 0;
+  display: none;
+  transition: .25s ease opacity;
+}
+
+#select-container {
+  transition: .25s ease opacity;
 }
 
 

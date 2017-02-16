@@ -50,7 +50,7 @@ app.post("/login", function(req, res){
       uuid = result.rows[0].uuid;
       bcrypt.compare(password, hashedPass, function(err, result) {
         if (result){
-          res.send({status:200, message:{access:access, uuid:id}})
+          res.send({status:200, message:{access:access, uuid:uuid}})
         } else {
           res.send({status:403, message:"Incorrect password"});
         }

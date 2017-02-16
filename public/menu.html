@@ -1,18 +1,47 @@
 <head>
-<link rel="stylesheet" type="text/css" href="visualizer.css">
+  <link rel="stylesheet" type="text/css" href="visualizer.css">
+  <script src="client.js"></script>
 </head>
 
+<div id="main-container">
+  <div class="header"></div>
 
-<div class="header"></div>
+  <div class="menu">
 
-<div class="menu">
-	
-	<div class="fixtures">
+      <div class="fixtures">
 
-	</div>
+      </div>
 
-	<div class="furniture">
-	
-	</div>
+      <div class="furniture">
 
+      </div>
+
+  </div>
+</div>
+
+<div id="login-sheet">
+  <div id="login">
+    <h1>Welcome to Floorplan Designer</h1>
+    <div id="select-container">
+      <h3>Who are you?</h3>
+      <a id="guest-button" class="button">Guest</a>
+      <a id="admin-button" class="button">Admin</a>
+    </div>
+    <div id="admin-container">
+      <div id="login-1" class="login-inner">
+        <h2>Register</h2>
+        <input type="text" placeholder="Username" id="rusername-input"/>
+        <input type="password" placeholder="Password" id="rpassword-input"/>
+        <input type="password" placeholder="Retype Password" id="rrpassword-input"/>
+        <a id="register-button" class="button">Register</a>
+      </div>
+      <div id="login-2" class="login-inner">
+        <h2>Login</h2>
+        <input type="text" placeholder="Username" id="username-input"/>
+        <input type="password" placeholder="Password" id="password-input"/>
+        <input type="password" placeholder="Password" id="hidden-input"/>
+        <a id="login-button" class="button">Login</a>
+      </div>
+    </div>
+  </div>
 </div>
