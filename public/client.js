@@ -122,7 +122,8 @@ function guestButtonClick(e){
   $("#fixture-title").remove();
   $("#placeLineButton").remove();
   $("#placeTextButton").remove();
-  $("#panButton").css("width", "90%")
+  $("#panButton").remove();
+  $("#furnitureBox").css("height", "80%")
   closeLoginBox();
 }
 
