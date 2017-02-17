@@ -663,5 +663,5 @@ function toggleLineDrawing(){
     $("#placeLineButton").toggleClass('depressed');
     lineDrawingMode = true;
   }
-  
+
 }

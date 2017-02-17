@@ -116,7 +116,8 @@ function registerButtonClick(e){
 }
 
 function guestButtonClick(e){
-  $("fixture-container").remove();
+  $("#fixture-container").remove();
+  $("#fixture-title").remove();
   closeLoginBox();
 }
 
