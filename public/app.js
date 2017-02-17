@@ -469,12 +469,13 @@ var iconId = 0;
 var icons = {};
 
 function addIcon(url, isFixture) {
+  var path = url.match(/^(https?\:)\/\/(([^:\/?#]*)(?:\:([0-9]+))?)([\/]{0,1}[^?#]*)(\?[^#]*|)(#.*|)$/)[5];
   fabric.loadSVGFromURL(url, function(objects, options) {
     var obj = fabric.util.groupSVGElements(objects, options);
     var id = iconId++;
     obj.id = id;
     obj.isFixture = isFixture;
-    obj.url = url;
+    obj.url = path;
     icons[id] = obj;
     if (!isAdmin && isFixture) {
       obj.lockMovementX = true;
@@ -492,10 +493,8 @@ function Icons2Model() {
   var data = [];
   for (var key in icons) {
     var icon = icons[key];
-    var path = icon.url.match(/^(https?\:)\/\/(([^:\/?#]*)(?:\:([0-9]+))?)([\/]{0,1}[^?#]*)(\?[^#]*|)(#.*|)$/)[5];
-    console.log(path);
     data.push({
-      url: path,
+      url: icon.url,
       angle: icon.getAngle(),
       top: icon.top,
       left: icon.left,
@@ -537,6 +536,9 @@ function loadIcon(model, i) {
     obj.url = icon.url;
     obj.isIcon = true;
     obj.isFixture = icon.isFixture;
+    if (!isAdmin && obj.isFixture) {
+      obj.set({ selectable: false });
+    }
     icons[id] = obj;
     canvas.add(obj).renderAll();
     loadIcon(model, ++i);
