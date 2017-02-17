@@ -96,7 +96,20 @@ function serializeAndRender() {
   es.forEach(function(e) {
     edges.push(e);
     canvas.add(e);
-  })
+  });
+}
+
+function renderView(view) {
+  var vs = view.vertices;
+  var es = view.edges;
+  vs.forEach(function(v) {
+    vertices.push(v);
+    canvas.add(v);
+  });
+  es.forEach(function(e) {
+    edges.push(e);
+    canvas.add(e);
+  });
 }
 
 Math.dist=function(x1,y1,x2,y2){
@@ -317,3 +330,26 @@ wrapper.addEventListener('keydown', function(e) {
   }
   return false;
 });
+
+
+
+
+
+
+
+
+// API CALLS HERE WOOOOOOOO
+function save() {
+  model = View2Model();
+
+  $.ajax({
+    type: 'POST',
+    data: model,
+    dataType: 'application/json',
+    success: saveCallback
+  });
+}
+
+function saveCallback(data) {
+  
+}
