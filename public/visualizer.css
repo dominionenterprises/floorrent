@@ -323,7 +323,7 @@ pre {
   box-shadow: 0 2px 17px rgba(0, 0, 0, 0.25);
 }
 
-.floorplan-thumb {
+.floorplan-thumb, .newfloorplan-thumb {
   width: 100%;
   height: 100%;
   background:white;

@@ -518,6 +518,8 @@ function loadCallback(data) {
   console.log(data);
   var model = JSON.parse(data.content);
   console.log(model);
+  floorplan.id = data.fpid;
+  floorplan.created = true;
   floorplan.name = data.name;
 
   var view = Model2View(model);
@@ -573,3 +575,15 @@ function checkForSave() {
 }
 setInterval(checkForSave, 1000);
 
+$( function() {
+    $( "#slider" ).slider({
+      value:1,
+      min: 0,
+      max: 3,
+      step: 1,
+      slide: function( event, ui ) {
+        $( "#amount" ).val( "$" + ui.value );
+      }
+    });
+    $( "#amount" ).val( "$" + $( "#slider" ).slider( "value" ) );
+  } );
