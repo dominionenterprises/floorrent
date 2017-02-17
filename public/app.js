@@ -552,12 +552,19 @@ function load() {
 }
 function loadCallback(data) {
   var model = JSON.parse(data.content);
+  var icons = JSON.parse(data.icons);
+  var labels = JSON.parse(data.labels);
   floorplan.id = data.fpid;
   floorplan.created = true;
   floorplan.name = data.name;
 
   var view = Model2View(model);
   renderView(view);
+  view = Model2Icons(icons);
+  renderView(view);
+  view = Model2Labels(labels);
+  renderView(view);
+
 }
 
 function save() {
