@@ -1,9 +1,10 @@
-var http = require("http");
-var express = require("express");
+var http = require('http');
+var express = require('express');
 var app = express();
 app.use(express.static(__dirname + "/"));
 var port = process.env.PORT || 5000;
 var server = http.createServer(app);
+var io = require('socket.io')(server);
 server.listen(port);
 var path = require('path');
 var bodyParser = require('body-parser')
@@ -44,6 +45,7 @@ app.post("/login", function(req, res){
       return console.error('error fetching client from pool', err);
     }
     client.query("SELECT * FROM users WHERE username=$1", [username], function(err, result) {
+      done();
       if(err) {
         return console.error('error running query', err);
       }
@@ -80,6 +82,7 @@ app.post("/register", function(req, res){
       return console.error('error fetching client from pool', err);
     }
     client.query("SELECT * FROM users WHERE username=$1", [username], function(err, result) {
+      done();
       if(err) {
         return console.error('error running query', err);
       }
@@ -108,6 +111,7 @@ app.get("/floorplan/:id/", function(req, res){
       return console.error('error fetching client from pool', err);
     }
     client.query("SELECT * FROM floorplans WHERE fpid=$1", [id], function(err, result) {
+      done();
       if(err) {
         return console.error('error running query', err);
       }
@@ -134,6 +138,7 @@ app.get("/floorplan", function(req, res){
       params = [];
     }
     client.query(query, params, function(err, result) {
+      done();
       if(err) {
         return console.error('error running query', err);
       }
@@ -151,36 +156,52 @@ app.post("/floorplan/", function(req, res){
   name = req.body.name;
   content = JSON.stringify(req.body.content);
   thumbnail = req.body.thumbnail;
-  pool.connect(function(err, client, done) {
-    if(err) {
-      return console.error('error fetching client from pool', err);
-    }
-    client.query("INSERT INTO floorplans (fpid, creator, name, content, thumbnail) VALUES(DEFAULT, $1, $2, $3, $4) RETURNING fpid", [creator, name, content, thumbnail], function(err, result) {
-      if(err) {
-        return console.error('error running query', err);
-      }
-      res.send(result.rows[0]);
-    });
+  createFloorplan(creator, name, content, thumbnail).then(function(result) {
+    res.send(result);
   });
 });
+function createFloorplan(creator, name, content, thumbnail) {
+  return new Promise(function(resolve, reject) {
+    pool.connect(function(err, client, done) {
+      if(err) {
+        reject(new Error('error fetching client from pool'));
+      }
+      client.query("INSERT INTO floorplans (fpid, creator, name, content, thumbnail) VALUES(DEFAULT, $1, $2, $3, $4) RETURNING fpid", [creator, name, content, thumbnail], function(err, result) {
+        done();
+        if(err) {
+          reject(new Error('error running query'));
+        }
+        resolve(result.rows[0]);
+      });
+    });
+  });
+}
 
 app.post("/floorplan/:id", function(req, res){
   content = JSON.stringify(req.body.content);
   name = req.body.name;
   thumbnail = req.body.thumbnail;
   id = parseInt(req.params.id);
-  pool.connect(function(err, client, done) {
-    if(err) {
-      return console.error('error fetching client from pool', err);
-    }
-    client.query("UPDATE floorplans SET content=$1, name=$2, thumbnail=$3 WHERE fpid=$4", [content, name, thumbnail, id], function(err, result) {
-      if(err) {
-        return console.error('error running query', err);
-      }
-      res.send(result);
-    });
+  saveFloorplan(content, name, thumbnail, id).then(function(result) {
+    res.send(result);
   });
 });
+function saveFloorplan(content, name, thumbnail, id) {
+  return new Promise(function(resolve, reject) {
+    pool.connect(function(err, client, done) {
+      if(err) {
+        reject(new Error('error fetching client from pool'));
+      }
+      client.query("UPDATE floorplans SET content=$1, name=$2, thumbnail=$3 WHERE fpid=$4", [content, name, thumbnail, id], function(err, result) {
+        done();
+        if(err) {
+          reject(new Error('error running query'));
+        }
+        resolve(result);
+      });
+    });
+  });
+}
 
 app.delete("/floorplan/:id", function(req, res){
   uuid = req.body.uuid;
@@ -190,6 +211,7 @@ app.delete("/floorplan/:id", function(req, res){
       return console.error('error fetching client from pool', err);
     }
     client.query("WITH a AS (DELETE FROM floorplans WHERE fpid=$1 AND creator=$2 returning 1) SELECT COUNT(*) from a", [id, uuid], function(err, result) {
+      done();
       if(err) {
         return console.error('error running query', err);
       }
@@ -211,6 +233,7 @@ app.get("/layout/:id/", function(req, res){
       return console.error('error fetching client from pool', err);
     }
     client.query("SELECT * FROM layouts WHERE lid=$1", [id], function(err, result) {
+      done();
       if(err) {
         return console.error('error running query', err);
       }
@@ -237,6 +260,7 @@ app.get("/layout", function(req, res){
       params = [];
     }
     client.query(query, params, function(err, result) {
+      done();
       if(err) {
         return console.error('error running query', err);
       }
@@ -257,6 +281,7 @@ app.post("/layout/", function(req, res){
       return console.error('error fetching client from pool', err);
     }
     client.query("INSERT INTO layouts (lid, creator, fpid) VALUES(DEFAULT, $1, $2) RETURNING lid", [creator, fpid], function(err, result) {
+      done();
       if(err) {
         return console.error('error running query', err);
       }
@@ -273,6 +298,7 @@ app.post("/layout/:id", function(req, res){
       return console.error('error fetching client from pool', err);
     }
     client.query("UPDATE layouts SET content=$1 WHERE lid=$2", [content, id], function(err, result) {
+      done();
       if(err) {
         return console.error('error running query', err);
       }
@@ -289,6 +315,7 @@ app.delete("/layout/:id", function(req, res){
       return console.error('error fetching client from pool', err);
     }
     client.query("WITH a AS (DELETE FROM layouts WHERE lid=$1 AND creator=$2 returning 1) SELECT COUNT(*) from a", [id, uuid], function(err, result) {
+      done();
       if(err) {
         return console.error('error running query', err);
       }
@@ -298,6 +325,30 @@ app.delete("/layout/:id", function(req, res){
         res.send({status:403, message:"Delete unsuccessful"});
       }
     });
+  });
+});
+
+
+/* socket connections  */
+
+io.on('connection', function(socket) {
+  console.log('A user connected');
+
+  socket.on('save', function(data) {
+    var content = data.content;
+    var name = data.name;
+    var thumbnail = data.thumbnail;
+    var id = data.id;
+    saveFloorplan(content, name, thumbnail, id);
+    console.log('user ' + name + ' saved plan')
+  });
+
+  socket.on('create', function(data) {
+    var creator = data.creator;
+    var name = data.name;
+    var content = data.content;
+    var thumbnail = data.thumbnail;
+    createFloorplan(creator, name, content, thumbnail);
   });
 });
 
