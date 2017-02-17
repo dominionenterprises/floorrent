@@ -13,6 +13,28 @@ body {
 	position: absolute;
 }
 
+.menu-button {
+	width: 130px;
+	height: 45px;
+	margin: 5 0 0 10;
+	box-shadow: 1px 1px 4px grey;
+	border-radius: 7px;
+	background-color: #E7E7E7;
+	display: inline-block;
+}
+
+.big-menu-button {
+	width: 274px;
+}
+
+.menu-button:hover {
+	background-color: #DCDCDC;
+}
+
+.menu-button:active {
+	background-color: #CECCCC;
+}
+
 .menu {
 	background-color: #DCDCDC;
 	height: 93vh;
@@ -30,7 +52,7 @@ body {
 
 
 .fixtures-box {
-	height: 150px;
+	height: 200px;
 	width: 90%;
 	background-color: #E7E7E7;
 	overflow-y: scroll;
@@ -41,7 +63,7 @@ body {
 }
 
 .furniture-box {
-	height: 150px;
+	height: 200px;
 	width: 90%;
 	background-color: #E7E7E7;
 	overflow-y: scroll;
@@ -170,7 +192,7 @@ body {
 }
 
 .icon-row {
-	min-height: 150px;
+	min-height: 80px;
 	display: flex;
 	align-items: center;
 }
@@ -182,7 +204,7 @@ body {
 
 .icon-image {
 	max-width: 70px;
-	max-height: 126px;
+	max-height: 70px;
 }
 
 
