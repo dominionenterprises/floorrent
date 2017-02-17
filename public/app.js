@@ -576,6 +576,7 @@ function checkForSave() {
 setInterval(checkForSave, 1000);
 
 $( function() {
+    var handle = $( "#custom-handle" );
     $( "#slider" ).slider({
       value:1,
       min: 0,

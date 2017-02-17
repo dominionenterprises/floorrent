@@ -18,9 +18,15 @@ body {
 	width: 230px;
 }
 
-.ui-slider-handle {
-	width: 40px;
-}
+#custom-handle {
+    background-color: #EC7200;
+    border: none;
+    height: 22px;
+  }
+
+/*.ui-slider-handle {
+	background-color: #EC7200;
+}*/
 
 .content {
         margin-top: 65px;
