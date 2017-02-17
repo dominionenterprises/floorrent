@@ -2,25 +2,27 @@
 
 body {
   margin: 0px 0px 0px 0px;
-  height: 100%;
   font-family: 'Roboto', sans-serif;
 }
 
 .header {
+        top: 0px;
 	background-color: #014876;
 	height: 65px;
 	width: 100%;
-	position: absolute;
+	position: fixed;
+}
+
+.content {
+        margin-top: 65px;
 }
 
 .menu {
 	background-color: #DCDCDC;
-	height: 93vh;
+        height: calc(100% - 65px);
 	width: 296px;
 	display: inline-block;
-	margin: 65px 0 0 0;
-	position: absolute;
-
+	position: fixed;
 }
 
 .icon-box-label {
@@ -28,6 +30,19 @@ body {
 	margin: 20px 0 0 0;
 }
 
+#canvasWrapper {
+        padding-left: 296px;
+        position: absolute;
+        width: calc(100% - 296px);
+        height: calc(100% - 65px);
+}
+
+#c {
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  border: none;
+}
 
 .fixtures-box {
 	height: 150px;

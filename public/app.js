@@ -11,7 +11,7 @@ var gridLines = [];
 
 var wrapper = document.getElementById('canvasWrapper');
 var grid = 25;
-var gridSize = 800;
+var gridSize = 2000;
 var vertexRadius = 10;
 var useGrid = true;
 var ORANGE = '#ec7200';
