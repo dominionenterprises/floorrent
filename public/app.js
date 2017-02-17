@@ -566,7 +566,7 @@ function loadCallback(data) {
   floorplan.id = data.fpid;
   floorplan.created = true;
   floorplan.name = data.name;
-  nameDiv.text('Floor plan: ' + floorplan.name);
+  nameDiv.text(floorplan.name);
 
   var view = Model2View(model);
   renderView(view);
@@ -619,6 +619,21 @@ function checkForSave() {
   }
 }
 setInterval(checkForSave, 1000);
+
+socket.on('update', function(data) {
+  console.log('got update');
+  console.log(data.content);
+  if (data.fpid === floorplan.id) {
+    var model = JSON.parse(data.content);
+    var view = Model2View(model);
+    // clear and render
+    for (var i = 0; i < vertices.length; i++) canvas.remove(vertices[i]);
+    for (var i = 0; i < edges.length; i++) canvas.remove(edges[i]);
+    vertices = [];
+    edges = [];
+    renderView(view);
+  } 
+});
 
 
 
