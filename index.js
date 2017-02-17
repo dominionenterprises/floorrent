@@ -338,16 +338,18 @@ io.on('connection', function(socket) {
 
   socket.on('save', function(data) {
     var content = JSON.stringify(data.content);
+    var icons = JSON.stringify(data.icons);
+    var labels = JSON.stringify(data.labels);
     var name = data.name;
     var thumbnail = data.thumbnail;
     var id = data.id;
-    saveFloorplan(content, name, thumbnail, id);
 
     // send updates to admins
     io.sockets.emit('update', {
       content: content,
       fpid: id
     });
+    saveFloorplan(content, name, thumbnail, id, icons, labels);
   });
 
   socket.on('create', function(data) {

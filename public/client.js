@@ -120,6 +120,9 @@ function guestButtonClick(e){
   newButton.style.display = "none";
   $("#fixture-container").remove();
   $("#fixture-title").remove();
+  $("#placeLineButton").remove();
+  $("#placeTextButton").remove();
+  $("#panButton").css("width", "90%")
   closeLoginBox();
 }
 
@@ -172,6 +175,9 @@ function loadAvailableFloorplans(){
 function handleFloorplanPaneClick(e){
   var currfpid = this.getAttribute("data-id");
   console.log(currfpid);
+  var ptag = this.getElementsByClassName("floorplan-name")[0];
+  currFloorplanName = ptag.innerHTML;
+  console.log(currFloorplanName);
   floorplan.id = currfpid;
   load();
   closeSelectionBox();
