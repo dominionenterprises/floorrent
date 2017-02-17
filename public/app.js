@@ -359,7 +359,11 @@ wrapper.addEventListener('keydown', function(e) {
     canvas.deactivateAll();
   } else if (e.key == 'Backspace') {
     var obj = canvas.getActiveObject();
-    delete icons[obj.id];
+    if (obj.type === 'label') {
+      delete labels[obj.id];
+    } else {
+      delete icons[obj.id];
+    }
     canvas.remove(obj);
   }
   return false;
@@ -371,9 +375,26 @@ function attachClickHandlers() {
     var img = imgs[i];
     img.onclick = addIcon.bind(this, img.src);
   }
+  var placeTextButton = document.getElementById('placeTextButton');
+  placeTextButton.onclick = addLabel;
 }
 
 attachClickHandlers();
+
+var labelId = 0;
+var labels = {};
+
+function addLabel() {
+  var text = new fabric.IText('room', {
+    fontSize: 20,
+    fontFamily: 'Trebuchet MS'
+  });
+  var id = labelId++;
+  labels[id] = text;
+  text.id = id;
+  text.type = 'label';
+  canvas.add(text);
+}
 
 var iconId = 0;
 
@@ -426,6 +447,7 @@ function loadIcon(model, i) {
     var id = iconId++;
     obj.id = id;
     obj.url = icon.url;
+    obj.type = 'fixture';
     icons[id] = obj;
     canvas.add(obj).renderAll();
     loadIcon(model, ++i);
@@ -454,7 +476,7 @@ function create() {
 }
 function createCallback(data) {
   console.log(data);
-  floorplan.id = data.fpid;    
+  floorplan.id = data.fpid;
   floorplan.created = true;
   console.log('created ' + floorplan.id);
 }
@@ -471,7 +493,7 @@ function loadCallback(data) {
   var model = JSON.parse(data.content);
   console.log(model);
   floorplan.name = data.name;
-  
+
   var view = Model2View(model);
   renderView(view);
 }
@@ -492,7 +514,7 @@ function save() {
   });
 }
 function saveCallback(data) {
-  console.log("great! saved"); 
+  console.log("great! saved");
 }
 
 
