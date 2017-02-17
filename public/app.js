@@ -10,8 +10,17 @@ var edges = [];
 var gridLines = [];
 
 var wrapper = document.getElementById('canvasWrapper');
+
+window.addEventListener('resize', resizeCanvas, false);
+function resizeCanvas() {
+  canvas.setWidth(wrapper.offsetWidth);
+  canvas.setHeight(wrapper.offsetHeight);
+  canvas.renderAll();
+}
+resizeCanvas();
+
 var grid = 25;
-var gridSize = 2000;
+var gridSize = canvas.width;
 var vertexRadius = 10;
 var useGrid = true;
 var ORANGE = '#ec7200';
