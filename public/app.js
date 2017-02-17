@@ -560,6 +560,8 @@ function loadCallback(data) {
 
 function save() {
   var model = View2Model();
+  var iconsModel = Icons2Model();
+  var labelsModel = Labels2Model();
   var tempcanvas = document.getElementById("c");
   var thumbnail = tempcanvas.toDataURL("image/png");
 
@@ -567,7 +569,9 @@ function save() {
     id: floorplan.id,
     name: name,
     content: model,
-    thumbnail: thumbnail
+    thumbnail: thumbnail,
+    labels: labelsModel,
+    icons: iconsModel
   });
   //$.ajax({
   //  url: apihost + '/floorplan/' + floorplan.id,
