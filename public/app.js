@@ -1,32 +1,45 @@
 "use strict";
 
 // user
-var userId = 2;
-var floorplanId;
-var floorplanName;
+var user = {
+  id: 2,
+  name: 'Please log in.'
+};
+
+// floorplan
+var floorplan = {
+  id: null,
+  name: null,
+  created: false
+};
 
 var apihost = "https://brainstorm-backend.herokuapp.com";
 
+// create fabric canvas
 var canvas = new fabric.Canvas('c', {
   selection: false,
   preserveObjectStacking: true
 });
 
+// global containers
 var vertices = [];
 var edges = [];
 var gridLines = [];
 
 var wrapper = document.getElementById('canvasWrapper');
 
+// grid variables
 var grid = 25;
 var gridSize = canvas.width;
 var vertexRadius = 10;
 var useGrid = true;
 var ORANGE = '#ec7200';
 
+// edge and vertex id's (incremented)
 var edgeId = 0, vertexId = 0;
 var selected;
 
+// temp line globals
 var showTempLine = false;
 var tempLineStartVertex;
 var tempLine = new fabric.Line([0, 0, 0, 0,], {
@@ -45,6 +58,9 @@ function resizeCanvas() {
 }
 resizeCanvas();
 
+
+
+// SERIALIZING VIEWS AND MODELS
 function View2Model() {
   return edges.map(function(e) {
     return {
@@ -125,7 +141,11 @@ Math.dist=function(x1,y1,x2,y2){
   return Math.sqrt((x2-x1)*(x2-x1)+(y2-y1)*(y2-y1));
 }
 
+
+
+// VERTEX, EDGE CLASSES
 function createVertex(x, y) {
+  scheduleSave();
   var vert = new Vertex(x, y);
   vertices.push(vert);
   canvas.add(vert);
@@ -152,6 +172,7 @@ function Vertex(x, y) {
 }
 
 function createEdge(v1, v2) {
+  scheduleSave();
   var edge = new Edge(v1, v2);
   edges.push(edge);
   edge.vertices[0].edges.push(edge);
@@ -179,11 +200,9 @@ function Edge(v1, v2) {
   return line;
 }
 
-function roundToGrid(n) {
-  return Math.round(n / grid) * grid;
-}
 
-// start temp line from vertex
+
+// TEMP LINE (for placing walls)
 function startTempLine(vert) {
   tempLineStartVertex = vert;
   showTempLine = true;
@@ -197,7 +216,13 @@ function clearTempLine() {
   canvas.renderAll();
 }
 
-// create grid
+
+
+// GRID STUFF
+function roundToGrid(n) {
+  return Math.round(n / grid) * grid;
+}
+
 function drawGrid() {
   for (var i = 0; i <= (gridSize/grid); i++) {
     var column = new fabric.Line([i*grid, 0, i*grid, gridSize], { stroke: '#eee', selectable: false});
@@ -334,6 +359,11 @@ wrapper.addEventListener('keydown', function(e) {
     canvas.deactivateAll();
   } else if (e.key == 'Backspace') {
     var obj = canvas.getActiveObject();
+    if (obj.type === 'label') {
+      delete labels[obj.id];
+    } else {
+      delete icons[obj.id];
+    }
     canvas.remove(obj);
   }
   return false;
@@ -345,16 +375,86 @@ function attachClickHandlers() {
     var img = imgs[i];
     img.onclick = addIcon.bind(this, img.src);
   }
+  var placeTextButton = document.getElementById('placeTextButton');
+  placeTextButton.onclick = addLabel;
 }
 
 attachClickHandlers();
 
+var labelId = 0;
+var labels = {};
+
+function addLabel() {
+  var text = new fabric.IText('room', {
+    fontSize: 20,
+    fontFamily: 'Trebuchet MS'
+  });
+  var id = labelId++;
+  labels[id] = text;
+  text.id = id;
+  text.type = 'label';
+  canvas.add(text);
+}
+
+var iconId = 0;
+
+var icons = {};
+
 function addIcon(url) {
   fabric.loadSVGFromURL(url, function(objects, options) {
     var obj = fabric.util.groupSVGElements(objects, options);
+    var id = iconId++;
+    obj.id = id;
+    obj.url = url;
+    icons[id] = obj;
     canvas.add(obj).renderAll();
   });
 }
+
+function Icons2Model() {
+  var data = [];
+  for (var key in icons) {
+    var icon = icons[key];
+    data.push({
+      url: icon.url,
+      angle: icon.getAngle(),
+      top: icon.top,
+      left: icon.left,
+      scaleX: icon.scaleX,
+      scaleY: icon.scaleY
+    });
+  }
+  return data;
+}
+
+function Model2Icons(model) {
+  loadIcon(model, 0);
+}
+
+function loadIcon(model, i) {
+  if (i >= model.length)
+    return;
+  var icon = model[i];
+  fabric.loadSVGFromURL(icon.url, function(objects, options) {
+    var obj = fabric.util.groupSVGElements(objects, options);
+    obj.set({
+      angle: icon.angle,
+      top: icon.top,
+      left: icon.left,
+      scaleX: icon.scaleX,
+      scaleY: icon.scaleY
+    });
+    var id = iconId++;
+    obj.id = id;
+    obj.url = icon.url;
+    obj.type = 'fixture';
+    icons[id] = obj;
+    canvas.add(obj).renderAll();
+    loadIcon(model, ++i);
+  });
+}
+
+
 
 // API CALLS HERE WOOOOOOOO
 function create() {
@@ -367,7 +467,7 @@ function create() {
     url: apihost + '/floorplan',
     type: 'POST',
     data: {
-      creator: userId,
+      creator: user.id,
       name: name,
       content: model,
       thumbnail: thumbnail
@@ -377,13 +477,14 @@ function create() {
 }
 function createCallback(data) {
   console.log(data);
-  floorplanId = data.fpid;    
-  console.log('created ' + floorplanId);
+  floorplan.id = data.fpid;
+  floorplan.created = true;
+  console.log('created ' + floorplan.id);
 }
 
 function load() {
   $.ajax({
-    url: apihost + '/floorplan/' + floorplanId,
+    url: apihost + '/floorplan/' + floorplan.id,
     type: 'GET',
     success: loadCallback
   });
@@ -392,8 +493,8 @@ function loadCallback(data) {
   console.log(data);
   var model = JSON.parse(data.content);
   console.log(model);
-  floorplanName = data.name;
-  
+  floorplan.name = data.name;
+
   var view = Model2View(model);
   renderView(view);
 }
@@ -403,10 +504,10 @@ function save() {
   var tempcanvas = document.getElementById("c");
   var thumbnail = tempcanvas.toDataURL("image/png");
   $.ajax({
-    url: apihost + '/floorplan/' + floorplanId,
+    url: apihost + '/floorplan/' + floorplan.id,
     type: 'POST',
     data: {
-      creator: userId,
+      creator: user.id,
       name: name,
       content: model,
       thumbnail: thumbnail
@@ -415,5 +516,28 @@ function save() {
   });
 }
 function saveCallback(data) {
-  console.log("great! saved"); 
+  console.log("great! saved");
 }
+
+
+
+// AUTOSAVING
+function scheduleSave() {
+  saveInterval = MAX_SAVE_INTERVAL;
+  console.log('saving after 5 seconds of inactivity...');
+}
+
+var saveInterval = 0;
+var MAX_SAVE_INTERVAL = 5;
+function checkForSave() {
+  if (saveInterval == 1) {
+    console.log('saving');
+    if (floorplan.created) save();
+    else console.log('not saving, floorplan not created');
+  }
+
+  if (saveInterval > 0) saveInterval--;
+  console.log(saveInterval + '...');
+}
+setInterval(checkForSave, 1000);
+
