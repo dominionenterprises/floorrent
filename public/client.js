@@ -117,6 +117,16 @@ function loadAvailableFloorplans(){
   $.get(apihost + "/floorplan", function(data){
     var floorplans = data;
     var floorplan, pane, border, thumb, name, creator;
+    pane = document.createElement("div");
+  pane.setAttribute("class", "floorplan-pane");
+  border = document.createElement("div");
+  border.setAttribute("class", "thumb-border");
+  thumb = document.createElement("div");
+  thumb.setAttribute("class", "newfloorplan-thumb");
+  border.appendChild(thumb);
+  pane.appendChild(border);
+  floorplanScroll.appendChild(pane);
+  pane.addEventListener("click", handleNewFloorplanPaneClick);
     for (var i=0; i<floorplans.length; i++){
       floorplan = floorplans[i];
       pane = document.createElement("div");
@@ -141,16 +151,6 @@ function loadAvailableFloorplans(){
     }
   });
   
-  pane = document.createElement("div");
-  pane.setAttribute("class", "floorplan-pane");
-  border = document.createElement("div");
-  border.setAttribute("class", "thumb-border");
-  thumb = document.createElement("div");
-  thumb.setAttribute("class", "newfloorplan-thumb");
-  border.appendChild(thumb);
-  pane.appendChild(border);
-  floorplanScroll.appendChild(pane);
-  pane.addEventListener("click", handleNewFloorplanPaneClick);
   
   //TODO: Add 'create new' button
 }
