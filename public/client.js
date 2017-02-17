@@ -170,6 +170,7 @@ function handleFloorplanPaneClick(e){
   floorplan.id = currfpid;
   load();
   closeSelectionBox();
+  resetMainContainer();
 }
 
 function handleNewFloorplanPaneClick(e){
