@@ -1,5 +1,12 @@
 "use strict";
 
+// user
+var userId = 2;
+var floorplanId;
+var floorplanName;
+
+var apihost = "https://brainstorm-backend.herokuapp.com";
+
 var canvas = new fabric.Canvas('c', {
   selection: false,
   preserveObjectStacking: true
@@ -339,17 +346,61 @@ wrapper.addEventListener('keydown', function(e) {
 
 
 // API CALLS HERE WOOOOOOOO
-function save() {
-  model = View2Model();
+function create() {
+  var model = View2Model();
+  var name = 'test name';
+  //TODO: thumbnail
 
   $.ajax({
+    url: apihost + '/floorplan',
     type: 'POST',
-    data: model,
-    dataType: 'application/json',
+    data: {
+      creator: userId,
+      name: name,
+      content: model,
+      thumbnail: "..."
+    },
+    success: createCallback
+  });
+}
+function createCallback(data) {
+  console.log(data);
+  floorplanId = data.fpid;    
+  console.log('created ' + floorplanId);
+}
+
+function load() {
+  $.ajax({
+    url: apihost + '/floorplan/' + floorplanId,
+    type: 'GET',
+    success: loadCallback
+  });
+}
+function loadCallback(data) {
+  console.log(data);
+  var model = JSON.parse(data.content);
+  console.log(model);
+  floorplanName = data.name;
+  
+  var view = Model2View(model);
+  renderView(view);
+}
+
+function save() {
+  var model = View2Model();
+
+  $.ajax({
+    url: apihost + '/floorplan/' + floorplanId,
+    type: 'POST',
+    data: {
+      creator: userId,
+      name: name,
+      content: model,
+      thumbnail: "..."
+    },
     success: saveCallback
   });
 }
-
 function saveCallback(data) {
-  
+  console.log("great! saved"); 
 }
