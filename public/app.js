@@ -327,6 +327,7 @@ wrapper.addEventListener('keydown', function(e) {
     canvas.deactivateAll();
   } else if (e.key == 'Backspace') {
     var obj = canvas.getActiveObject();
+    delete icons[obj.id];
     canvas.remove(obj);
   }
   return false;
@@ -342,10 +343,60 @@ function attachClickHandlers() {
 
 attachClickHandlers();
 
+var iconId = 0;
+
+var icons = {};
+
 function addIcon(url) {
   fabric.loadSVGFromURL(url, function(objects, options) {
     var obj = fabric.util.groupSVGElements(objects, options);
+    var id = iconId++;
+    obj.id = id;
+    obj.url = url;
+    icons[id] = obj;
     canvas.add(obj).renderAll();
+  });
+}
+
+function Icons2Model() {
+  var data = [];
+  for (var key in icons) {
+    var icon = icons[key];
+    data.push({
+      url: icon.url,
+      angle: icon.getAngle(),
+      top: icon.top,
+      left: icon.left,
+      scaleX: icon.scaleX,
+      scaleY: icon.scaleY
+    });
+  }
+  return data;
+}
+
+function Model2Icons(model) {
+  loadIcon(model, 0);
+}
+
+function loadIcon(model, i) {
+  if (i >= model.length)
+    return;
+  var icon = model[i];
+  fabric.loadSVGFromURL(icon.url, function(objects, options) {
+    var obj = fabric.util.groupSVGElements(objects, options);
+    obj.set({
+      angle: icon.angle,
+      top: icon.top,
+      left: icon.left,
+      scaleX: icon.scaleX,
+      scaleY: icon.scaleY
+    });
+    var id = iconId++;
+    obj.id = id;
+    obj.url = icon.url;
+    icons[id] = obj;
+    canvas.add(obj).renderAll();
+    loadIcon(model, ++i);
   });
 }
 
