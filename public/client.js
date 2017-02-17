@@ -115,6 +115,7 @@ function registerButtonClick(e){
 }
 
 function guestButtonClick(e){
+  $("fixture-container").remove();
   closeLoginBox();
 }
 
@@ -150,7 +151,7 @@ function loadAvailableFloorplans(){
       pane.addEventListener("click", handleFloorplanPaneClick);
     }
   });
-  
+
   pane = document.createElement("div");
   pane.setAttribute("class", "floorplan-pane");
   border = document.createElement("div");

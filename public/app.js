@@ -72,6 +72,8 @@ function View2Model() {
 }
 
 function Model2View(model) {
+  if (!model)
+    return;
   var vs = []
   var es = []
   var seenVertices = {};
