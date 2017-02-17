@@ -544,7 +544,6 @@ function loadCallback(data) {
   floorplan.id = data.fpid;
   floorplan.created = true;
   floorplan.name = data.name;
-  floorplan.id = data.id;
 
   var view = Model2View(model);
   renderView(view);
