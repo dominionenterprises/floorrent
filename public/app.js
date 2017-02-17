@@ -528,10 +528,8 @@ function create() {
   });
 }
 function createCallback(data) {
-  console.log(data);
   floorplan.id = data.fpid;
   floorplan.created = true;
-  console.log('created ' + floorplan.id);
 }
 
 function load() {
@@ -542,9 +540,7 @@ function load() {
   });
 }
 function loadCallback(data) {
-  console.log(data);
   var model = JSON.parse(data.content);
-  console.log(model);
   floorplan.id = data.fpid;
   floorplan.created = true;
   floorplan.name = data.name;
@@ -603,15 +599,31 @@ function checkForSave() {
 }
 setInterval(checkForSave, 1000);
 
-$( function() {
-    $( "#slider" ).slider({
-      value:1,
-      min: 0,
-      max: 3,
-      step: 1,
-      slide: function( event, ui ) {
-        $( "#amount" ).val( "$" + ui.value );
+$(function() {
+  $("#slider").slider({
+    value:1,
+    min: 0,
+    max: 3,
+    step: 1,
+    slide: function(event, ui) {
+      $("#amount").val("$" + ui.value);
+    },
+    change: function(e, ui) {
+      switch (ui.value) {
+        case 0:
+          updateGrid(40);
+          break;
+        case 1:
+          updateGrid(20);
+          break;
+        case 2:
+          updateGrid(10);
+          break;
+        case 3:
+          updateGrid(5);
+          break;
       }
-    });
-    $( "#amount" ).val( "$" + $( "#slider" ).slider( "value" ) );
-  } );
+    }
+  });
+  $("#amount").val("$" + $("#slider").slider("value"));
+});
