@@ -149,7 +149,7 @@ app.get("/floorplan", function(req, res){
 app.post("/floorplan/", function(req, res){
   creator = req.body.creator;
   name = req.body.name;
-  content = req.body.content;
+  content = JSON.stringify(req.body.content);
   thumbnail = req.body.thumbnail;
   pool.connect(function(err, client, done) {
     if(err) {
@@ -165,7 +165,7 @@ app.post("/floorplan/", function(req, res){
 });
 
 app.post("/floorplan/:id", function(req, res){
-  content = req.body.content;
+  content = JSON.stringify(req.body.content);
   name = req.body.name;
   thumbnail = req.body.thumbnail;
   id = parseInt(req.params.id);
