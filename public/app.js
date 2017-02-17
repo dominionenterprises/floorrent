@@ -493,6 +493,8 @@ function loadCallback(data) {
   console.log(data);
   var model = JSON.parse(data.content);
   console.log(model);
+  floorplan.id = data.fpid;
+  floorplan.created = true;
   floorplan.name = data.name;
 
   var view = Model2View(model);
