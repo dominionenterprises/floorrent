@@ -20,6 +20,7 @@ var canvas = new fabric.Canvas('c', {
   selection: false,
   preserveObjectStacking: true
 });
+var nameDiv = $('#name');
 
 // global containers
 var vertices = [];
@@ -557,6 +558,7 @@ function loadCallback(data) {
   floorplan.id = data.fpid;
   floorplan.created = true;
   floorplan.name = data.name;
+  nameDiv.text('Floor plan: ' + floorplan.name);
 
   var view = Model2View(model);
   renderView(view);
@@ -605,20 +607,24 @@ var socket = io();
 var saveDiv = $('#save');
 
 function scheduleSave() {
-  saveInterval = MAX_SAVE_INTERVAL;
-  saveDiv.text('Saving changes...');
+  if (isAdmin) {
+    saveInterval = MAX_SAVE_INTERVAL;
+    saveDiv.text('Saving changes...');
+  }
 }
 
 var saveInterval = 0;
 var MAX_SAVE_INTERVAL = 3;
 function checkForSave() {
-  if (saveInterval == 1) {
-    console.log('saving');
-    if (floorplan.created) save();
-    saveDiv.text('All changes saved.');
-  }
+  if (isAdmin) {
+    if (saveInterval == 1) {
+      console.log('saving');
+      if (floorplan.created) save();
+      saveDiv.text('All changes saved.');
+    }
 
-  if (saveInterval > 0) saveInterval--;
+    if (saveInterval > 0) saveInterval--;
+  }
 }
 setInterval(checkForSave, 1000);
 
