@@ -519,9 +519,9 @@ function save() {
   //  success: saveCallback
   //});
 }
-function saveCallback(data) {
-  console.log("great! saved");
-}
+//function saveCallback(data) {
+//  console.log("great! saved");
+//}
 
 
 
@@ -539,11 +539,9 @@ function checkForSave() {
   if (saveInterval == 1) {
     console.log('saving');
     if (floorplan.created) save();
-    else console.log('not saving, floorplan not created');
   }
 
   if (saveInterval > 0) saveInterval--;
-  console.log(saveInterval + '...');
 }
 setInterval(checkForSave, 1000);
 

@@ -335,7 +335,7 @@ io.on('connection', function(socket) {
   console.log('A user connected');
 
   socket.on('save', function(data) {
-    var content = data.content;
+    var content = JSON.stringify(data.content);
     var name = data.name;
     var thumbnail = data.thumbnail;
     var id = data.id;
@@ -346,7 +346,7 @@ io.on('connection', function(socket) {
   socket.on('create', function(data) {
     var creator = data.creator;
     var name = data.name;
-    var content = data.content;
+    var content = JSON.stringify(data.content);
     var thumbnail = data.thumbnail;
     createFloorplan(creator, name, content, thumbnail);
   });
