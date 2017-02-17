@@ -16,13 +16,17 @@ function openSelectionBox(){
   setTimeout(function(){
     selectionBox.style.opacity = "1";
     selectionBox.style.marginTop = "19vh";
+    closeSelectionBox();
   }, 10);
 }
 
 function closeSelectionBox(){
   var mainContainer = document.getElementById("main-container");
+  var selectionBox = document.getElementById("selection-box");
+  var loginSheet = document.getElementById("login-sheet");
   mainContainer.style.filter = "blur(0px) saturate(1)";
   setTimeout(function(){
+    selectionBox.style.display = "none";
     loginSheet.style.display = "none";
   }, 250);
 }
