@@ -13,7 +13,7 @@ var floorplan = {
   created: false
 };
 
-var apihost = "https://brainstorm-backend.herokuapp.com";
+var apihost = "http://brainstorm-backend.herokuapp.com";
 
 // create fabric canvas
 var canvas = new fabric.Canvas('c', {
@@ -513,6 +513,8 @@ function Model2Icons(model) {
 }
 
 function loadIcon(model, i) {
+  if (!model)
+    return;
   if (i >= model.length)
     return;
   var icon = model[i];
@@ -644,7 +646,7 @@ socket.on('update', function(data) {
     vertices = [];
     edges = [];
     renderView(view);
-  } 
+  }
 });
 
 

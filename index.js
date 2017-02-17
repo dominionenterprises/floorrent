@@ -8,14 +8,18 @@ var io = require('socket.io')(server);
 server.listen(port);
 var path = require('path');
 var bodyParser = require('body-parser')
+var cors = require('cors');
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
+/*
 app.use(function(req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
   next();
 });
+*/
+app.use(cors());
 
 // serve static files from public
 app.use(express.static('public'));
@@ -65,7 +69,7 @@ app.post("/login", function(req, res){
       });
     });
   });
-  
+
 });
 
 

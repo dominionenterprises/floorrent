@@ -1,4 +1,4 @@
-var apihost = "https://brainstorm-backend.herokuapp.com";
+var apihost = "http://brainstorm-backend.herokuapp.com";
 var isAdmin = false;
 var currFloorplanName = "";
 
