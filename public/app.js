@@ -231,8 +231,6 @@ canvas.on('mouse:down', function(options) {
   if (!options.target || !options.target.selectable) {
     var x = roundToGrid(options.e.offsetX);
     var y = roundToGrid(options.e.offsetY);
-    console.log(options);
-    console.log('creating vertex at ' + x + ', ' + y);
 
     var vert = createVertex(x, y);
     if (showTempLine) {
@@ -327,6 +325,9 @@ wrapper.addEventListener('keydown', function(e) {
   if (e.key === 'Escape') {
     clearTempLine();
     canvas.deactivateAll();
+  } else if (e.key == 'Backspace') {
+    var obj = canvas.getActiveObject();
+    canvas.remove(obj);
   }
   return false;
 });
