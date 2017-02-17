@@ -32,12 +32,45 @@ body {
   background: url(/images/skyscrapers.jpg);
   background-position: center;
   background-size: cover;
+  margin-left: 5vw;
+  margin-top: 18vh;
 }
 
 #screen-card {
   background: url(/images/screenshot.png);
   background-position: center;
   background-size: cover;
-  margin-left: 15vw;
-  margin-top: 15vh;
+  margin-left: 10vw;
+  margin-top: 28vh;
+}
+
+#text-card {
+  padding: 30px;
+  position: absolute;
+  right: 5vw;
+  top: 15vh;
+  text-align: center;
+  width: 20vw;
+}
+
+
+#text-card img {
+  width: 100%;
+}
+
+#text-card p {
+  color: white;
+  font-size: 24px;
+  text-align: center;
+}
+
+#experience-button {
+  padding: 16px 20px;
+  color: white;
+  background: #ec7200;
+  border-radius: 4px;
+  text-decoration: none;
+  margin: auto;
+  display: inline-block;
+  text-align: center;
 }
