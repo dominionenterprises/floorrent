@@ -365,6 +365,8 @@ canvas.on('mouse:move', function(options) {
     }
   }
 
+  // check for walls
+
   canvas.renderAll();
 });
 
@@ -557,6 +559,9 @@ function create() {
 function createCallback(data) {
   floorplan.id = data.fpid;
   floorplan.created = true;
+  floorplan.name = currFloorplanName;
+  console.log(data);
+  nameDiv.text(floorplan.name);
 }
 
 function load() {
