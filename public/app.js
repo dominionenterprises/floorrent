@@ -1,5 +1,12 @@
 "use strict";
 
+// user
+var userId = 2;
+var floorplanId;
+var floorplanName;
+
+var apihost = "https://brainstorm-backend.herokuapp.com";
+
 var canvas = new fabric.Canvas('c', {
   selection: false,
   preserveObjectStacking: true
@@ -231,8 +238,6 @@ canvas.on('mouse:down', function(options) {
   if (!options.target || !options.target.selectable) {
     var x = roundToGrid(options.e.offsetX);
     var y = roundToGrid(options.e.offsetY);
-    console.log(options);
-    console.log('creating vertex at ' + x + ', ' + y);
 
     var vert = createVertex(x, y);
     if (showTempLine) {
@@ -327,6 +332,9 @@ wrapper.addEventListener('keydown', function(e) {
   if (e.key === 'Escape') {
     clearTempLine();
     canvas.deactivateAll();
+  } else if (e.key == 'Backspace') {
+    var obj = canvas.getActiveObject();
+    canvas.remove(obj);
   }
   return false;
 });
@@ -349,17 +357,65 @@ function addIcon(url) {
 }
 
 // API CALLS HERE WOOOOOOOO
-function save() {
-  model = View2Model();
+function create() {
+  var model = View2Model();
+  var name = 'test name';
+  //TODO: thumbnail
 
   $.ajax({
+    url: apihost + '/floorplan',
     type: 'POST',
-    data: model,
-    dataType: 'application/json',
+    data: {
+      creator: userId,
+      name: name,
+      content: model,
+      thumbnail: "..."
+    },
+    success: createCallback
+  });
+}
+function createCallback(data) {
+  console.log(data);
+  floorplanId = data.fpid;    
+  console.log('created ' + floorplanId);
+}
+
+function load() {
+  $.ajax({
+    url: apihost + '/floorplan/' + floorplanId,
+    type: 'GET',
+    success: loadCallback
+  });
+}
+function loadCallback(data) {
+  console.log(data);
+  var model = JSON.parse(data.content);
+  console.log(model);
+  floorplanName = data.name;
+  
+  var view = Model2View(model);
+  renderView(view);
+}
+
+function save() {
+  var model = View2Model();
+
+  $.ajax({
+    url: apihost + '/floorplan/' + floorplanId,
+    type: 'POST',
+    data: {
+      creator: userId,
+      name: name,
+      content: model,
+      thumbnail: "..."
+    },
     success: saveCallback
   });
 }
-
 function saveCallback(data) {
+<<<<<<< HEAD
+  console.log("great! saved"); 
+=======
 
+>>>>>>> 79b379ddfe31b216a60af85499bbe337e7d73f3c
 }
