@@ -37,7 +37,6 @@ var ORANGE = '#ec7200';
 
 // edge and vertex id's (incremented)
 var edgeId = 0, vertexId = 0;
-var selected;
 
 // temp line globals
 var showTempLine = false;
@@ -163,7 +162,7 @@ function Vertex(x, y) {
     hasControls: false,
     id: vertexId++,
     edges: [],
-    type: 'Vertex',
+    type: 'vertex',
     opacity: 0,
     selectable: false
   });
@@ -274,7 +273,7 @@ canvas.on('mouse:down', function(options) {
 });
 
 canvas.on('object:selected', function(options) {
-  if (options.target.type === 'Vertex') {
+  if (options.target.type === 'vertex') {
     if (showTempLine) {
       var vert = options.target;
       var edge = createEdge(tempLineStartVertex, vert);
@@ -292,7 +291,7 @@ function other(vert, edge) {
 }
 
 canvas.on('object:moving', function(options) {
-  if (options.target.type === 'Vertex') {
+  if (options.target.type === 'vertex') {
     var vert = options.target;
 
     // snap to grid
@@ -361,8 +360,31 @@ wrapper.addEventListener('keydown', function(e) {
     var obj = canvas.getActiveObject();
     if (obj.type === 'label') {
       delete labels[obj.id];
-    } else {
+    } else if (obj.type === 'icon') {
       delete icons[obj.id];
+    } else if (obj.type === 'vertex') {
+      vertices = vertices.filter(function(el) {
+        return el.id !== obj.id;
+      });
+      for (var i = 0; i < obj.edges.length; i++) {
+        var edge = obj.edges[i];
+        edges = edges.filter(function(el) {
+          return el.id !== edge.id;
+        });
+
+        // remove from each vertex edge list
+        for (var j = 0; j < vertices.length; j++) {
+          var vert = vertices[j];
+          vert.edges = vert.edges.filter(function(el) {
+            return el.id !== edge.id;
+          });
+        }
+
+        canvas.remove(edge);
+      }
+      // clear selection
+      clearTempLine();
+      canvas.deactivateAll();
     }
     canvas.remove(obj);
   }
@@ -447,7 +469,7 @@ function loadIcon(model, i) {
     var id = iconId++;
     obj.id = id;
     obj.url = icon.url;
-    obj.type = 'fixture';
+    obj.type = 'icon';
     icons[id] = obj;
     canvas.add(obj).renderAll();
     loadIcon(model, ++i);
@@ -494,6 +516,7 @@ function loadCallback(data) {
   var model = JSON.parse(data.content);
   console.log(model);
   floorplan.name = data.name;
+  floorplan.id = data.id;
 
   var view = Model2View(model);
   renderView(view);
