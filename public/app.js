@@ -238,8 +238,6 @@ canvas.on('mouse:down', function(options) {
   if (!options.target || !options.target.selectable) {
     var x = roundToGrid(options.e.offsetX);
     var y = roundToGrid(options.e.offsetY);
-    console.log(options);
-    console.log('creating vertex at ' + x + ', ' + y);
 
     var vert = createVertex(x, y);
     if (showTempLine) {
@@ -334,16 +332,29 @@ wrapper.addEventListener('keydown', function(e) {
   if (e.key === 'Escape') {
     clearTempLine();
     canvas.deactivateAll();
+  } else if (e.key == 'Backspace') {
+    var obj = canvas.getActiveObject();
+    canvas.remove(obj);
   }
   return false;
 });
 
+function attachClickHandlers() {
+  var imgs = document.getElementsByClassName('icon-image');
+  for (var i = 0; i < imgs.length; i++) {
+    var img = imgs[i];
+    img.onclick = addIcon.bind(this, img.src);
+  }
+}
 
+attachClickHandlers();
 
-
-
-
-
+function addIcon(url) {
+  fabric.loadSVGFromURL(url, function(objects, options) {
+    var obj = fabric.util.groupSVGElements(objects, options);
+    canvas.add(obj).renderAll();
+  });
+}
 
 // API CALLS HERE WOOOOOOOO
 function create() {
@@ -402,5 +413,9 @@ function save() {
   });
 }
 function saveCallback(data) {
+<<<<<<< HEAD
   console.log("great! saved"); 
+=======
+
+>>>>>>> 79b379ddfe31b216a60af85499bbe337e7d73f3c
 }
