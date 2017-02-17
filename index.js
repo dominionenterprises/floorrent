@@ -148,11 +148,14 @@ app.get("/floorplan", function(req, res){
 
 app.post("/floorplan/", function(req, res){
   creator = req.body.creator;
+  name = req.body.name;
+  content = req.body.content;
+  thumbnail = req.body.thumbnail;
   pool.connect(function(err, client, done) {
     if(err) {
       return console.error('error fetching client from pool', err);
     }
-    client.query("INSERT INTO floorplans (fpid, creator) VALUES(DEFAULT, $1) RETURNING fpid", [creator], function(err, result) {
+    client.query("INSERT INTO floorplans (fpid, creator, name, content, thumbnail) VALUES(DEFAULT, $1, $2, $3, $4) RETURNING fpid", [creator, name, content, thumbnail], function(err, result) {
       if(err) {
         return console.error('error running query', err);
       }
