@@ -61,6 +61,10 @@ body {
 	background-color: #CECCCC;
 }
 
+.depressed {
+	background-color: #CECCCC !important;
+}
+
 .menu {
 	background-color: #DCDCDC;
         height: calc(100% - 65px);
