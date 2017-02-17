@@ -522,10 +522,8 @@ function create() {
   });
 }
 function createCallback(data) {
-  console.log(data);
   floorplan.id = data.fpid;
   floorplan.created = true;
-  console.log('created ' + floorplan.id);
 }
 
 function load() {
@@ -536,9 +534,7 @@ function load() {
   });
 }
 function loadCallback(data) {
-  console.log(data);
   var model = JSON.parse(data.content);
-  console.log(model);
   floorplan.id = data.fpid;
   floorplan.created = true;
   floorplan.name = data.name;
