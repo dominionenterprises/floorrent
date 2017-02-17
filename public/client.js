@@ -151,18 +151,19 @@ function loadAvailableFloorplans(){
       pane.addEventListener("click", handleFloorplanPaneClick);
     }
   });
-  
-  pane = document.createElement("div");
-  pane.setAttribute("class", "floorplan-pane");
-  border = document.createElement("div");
-  border.setAttribute("class", "thumb-border");
-  thumb = document.createElement("div");
-  thumb.setAttribute("class", "newfloorplan-thumb");
-  thumb.innerHTML = "+";
-  border.appendChild(thumb);
-  pane.appendChild(border);
-  floorplanScroll.appendChild(pane);
-  pane.addEventListener("click", handleNewFloorplanPaneClick);
+  if (isAdmin){
+    pane = document.createElement("div");
+    pane.setAttribute("class", "floorplan-pane");
+    border = document.createElement("div");
+    border.setAttribute("class", "thumb-border");
+    thumb = document.createElement("div");
+    thumb.setAttribute("class", "newfloorplan-thumb");
+    thumb.innerHTML = "+";
+    border.appendChild(thumb);
+    pane.appendChild(border);
+    floorplanScroll.appendChild(pane);
+    pane.addEventListener("click", handleNewFloorplanPaneClick);
+  }
 }
 
 function handleFloorplanPaneClick(e){
