@@ -331,12 +331,22 @@ wrapper.addEventListener('keydown', function(e) {
   return false;
 });
 
+function attachClickHandlers() {
+  var imgs = document.getElementsByClassName('icon-image');
+  for (var i = 0; i < imgs.length; i++) {
+    var img = imgs[i];
+    img.onclick = addIcon.bind(this, img.src);
+  }
+}
 
+attachClickHandlers();
 
-
-
-
-
+function addIcon(url) {
+  fabric.loadSVGFromURL(url, function(objects, options) {
+    var obj = fabric.util.groupSVGElements(objects, options);
+    canvas.add(obj).renderAll();
+  });
+}
 
 // API CALLS HERE WOOOOOOOO
 function save() {
@@ -351,5 +361,5 @@ function save() {
 }
 
 function saveCallback(data) {
-  
+
 }
