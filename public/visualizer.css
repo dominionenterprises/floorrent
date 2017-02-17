@@ -1,0 +1,431 @@
+@import url('https://fonts.googleapis.com/css?family=Roboto:300,400,700');
+
+body {
+  margin: 0px 0px 0px 0px;
+  font-family: 'Roboto', sans-serif;
+}
+
+.header {
+    top: 0px;
+	background-color: #014876;
+	height: 65px;
+	width: 100%;
+	position: fixed;
+}
+
+
+#save {
+    float: left;
+    padding: 23px;
+    color: #E7E7E7;
+}
+
+#logo {
+  padding: 20px;
+  float: right;
+  margin-top: -7px;
+}
+
+#name {
+  color: #E7E7E7;
+  padding: 23px;
+  float: left;
+  margin-top: -10px;
+  margin-left: 10px;
+  font-size: 30px;
+
+}
+
+.slider {
+	margin: 5 0 30 34;
+	width: 230px;
+}
+
+#custom-handle {
+    background-color: #EC7200;
+    border: none;
+    height: 22px;
+  }
+
+/*.ui-slider-handle {
+	background-color: #EC7200;
+}*/
+
+.content {
+        margin-top: 65px;
+}
+
+.menu-button {
+	width: 83px;
+	height: 45px;
+	margin: 22 0 0 10;
+	box-shadow: 1px 1px 4px grey;
+	border-radius: 7px;
+	background-color: #E7E7E7;
+	display: inline-block;
+	text-align: center;
+}
+
+.text-icon {
+	width: 30px; 
+	position: fixed; 
+	margin: 5 0 0 -15; 
+}
+
+.big-menu-button {
+	width: 274px;
+}
+
+.menu-button:hover {
+	background-color: #DCDCDC;
+}
+
+.menu-button:active {
+	background-color: #CECCCC;
+}
+
+.depressed {
+	background-color: #CECCCC !important;
+}
+
+.menu {
+	background-color: #DCDCDC;
+        height: calc(100% - 65px);
+	width: 296px;
+	display: inline-block;
+	position: fixed;
+}
+
+.icon-box-label {
+	text-align: center;
+	margin: 28px 0 8 0;
+}
+
+#canvasWrapper {
+        margin-left: 296px;
+        /*position: absolute;*/
+        z-index: -1;
+        border: none;
+        width: calc(100% - 296px);
+        height: calc(100% - 65px);
+}
+
+.fixtures-box {
+	height: 30%;
+	width: 90%;
+	background-color: #E7E7E7;
+	overflow-y: scroll;
+	margin: auto;
+	margin-top: 5px;
+	direction: rtl;
+	text-align: left;
+}
+
+.furniture-box {
+	height: 30%;
+	width: 90%;
+	background-color: #E7E7E7;
+	overflow-y: scroll;
+	margin: auto;
+	margin-top: 5px;
+	direction: rtl;
+	text-align: left;
+}
+
+#main-container {
+  transition: .25s all linear;
+  filter: blur(5px);
+}
+
+#login-sheet {
+  position: fixed;
+  top:0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  text-align: center;
+  transition: .25s all ease;
+}
+
+#login, #selection-box, #newname-box {
+  position: relative;
+  margin: auto;
+  margin-top: 25vh;
+  padding: 50px;
+  width: 40%;
+  background: #E7E7E7;
+  background: rgba(235,235,235,0.65);
+  border-radius: 4px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.25);
+  border: 1px solid rgba(0,0,0,0.1);
+  min-height: 350px;
+  transition: .25s opacity ease, .25s margin-top ease;
+}
+
+#selection-box {
+  margin-top: 24vh;
+  width: 60%;
+  min-height: 500px;
+}
+
+#selection-box {
+  margin-top: 30vh;
+  display: none;
+  opacity: 0;
+}
+
+#newname-box {
+  opacity: 0;
+  display: none;
+  position: absolute;
+  top: 0;
+  min-height: 100px;
+  padding: 25px;
+  margin-left: auto;
+  margin-right: auto;
+  left: 0;
+  right: 0;
+}
+
+#newfpname {
+  padding: 10px 10px;
+  margin-bottom: 5px;
+  font-size: 20px;
+  font-weight: 300;
+  border-radius: 2px;
+  border: none;
+}
+
+#newsubmit {
+  padding: 10px 0px;
+}
+
+#login h2{
+  font-weight: 400;
+}
+
+#login h1{
+  font-weight: 300;
+}
+
+#login h3{
+  font-weight: 300;
+  font-size: 24px;
+}
+
+.button {
+  display: inline-block;
+  cursor: pointer;
+  background: #014876;
+  color: white;
+  padding: 10px 20px;
+  border-radius: 4px;
+  width: 100px;
+  margin: 5px;
+  margin-top: 10px;
+  transition: .1s ease all;
+  -moz-user-select: -moz-none;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+.button:hover {
+  background: #1b74af;
+}
+
+#guest-button, #admin-button {
+  padding: 40px 60px;
+  font-size: 24px;
+  font-weight: 100;
+  margin-top: 40px;
+}
+
+.login-inner{
+  display:inline-block;
+  transition: .25s all linear;
+  width: 49%;
+  vertical-align: top;
+}
+
+.login-inner input{
+  display:inline-block;
+  width: 85%;
+  padding: 10px 10px;
+  margin-bottom: 5px;
+  font-size: 20px;
+  font-weight: 300;
+  border-radius: 2px;
+  border: none;
+}
+
+#hidden-input {
+  opacity: 0;
+}
+
+#login-2 {
+  border-left: 1px solid #ccc;
+}
+
+#admin-container {
+  position: absolute;
+  margin-right: 50px;
+  top: 125px;
+  opacity: 0;
+  display: none;
+  transition: .25s ease opacity;
+}
+
+#select-container {
+  transition: .25s ease opacity;
+}
+
+.icon {
+	margin: 10 25 10 25;
+	display: inline-block;
+	position: relative;
+	text-align: center;
+	width: 70px;
+	/*height: 120px;*/
+
+}
+
+.icon-row {
+	min-height: 80px;
+	display: flex;
+	align-items: center;
+}
+
+.icon-text {
+	margin: 0 0 4px 0;
+
+}
+
+.icon-image {
+	max-width: 70px;
+	max-height: 70px;
+}
+
+
+h1 {
+	font-family: "Trebuchet MS", "Lucida Grande", "Lucida Sans Unicode", "Lucida Sans", Tahoma, sans-serif;
+	font-size: 24px;
+	font-style: normal;
+	font-variant: normal;
+	font-weight: 500;
+	line-height: 26.4px;
+}
+h2 {
+	font-family: "Trebuchet MS", "Lucida Grande", "Lucida Sans Unicode", "Lucida Sans", Tahoma, sans-serif;
+	font-size: 20px;
+	font-style: normal;
+	font-variant: normal;
+	font-weight: 500;
+	line-height: 20.4px;
+}
+h3 {
+	font-family: "Trebuchet MS", "Lucida Grande", "Lucida Sans Unicode", "Lucida Sans", Tahoma, sans-serif;
+	font-size: 14px;
+	font-style: normal;
+	font-variant: normal;
+	font-weight: 500;
+	line-height: 15.4px;
+}
+p {
+	font-family: "Trebuchet MS", "Lucida Grande", "Lucida Sans Unicode", "Lucida Sans", Tahoma, sans-serif;
+	font-size: 12px;
+	font-style: normal;
+	font-variant: normal;
+	font-weight: 400;
+	line-height: 20px;
+}
+blockquote {
+	font-family: "Trebuchet MS", "Lucida Grande", "Lucida Sans Unicode", "Lucida Sans", Tahoma, sans-serif;
+	font-size: 21px;
+	font-style: normal;
+	font-variant: normal;
+	font-weight: 400;
+	line-height: 30px;
+}
+pre {
+	font-family: "Trebuchet MS", "Lucida Grande", "Lucida Sans Unicode", "Lucida Sans", Tahoma, sans-serif;
+	font-size: 13px;
+	font-style: normal;
+	font-variant: normal;
+	font-weight: 400;
+	line-height: 18.5714px;
+}
+
+ /* This text is in Trebuchet MS */
+.class { 
+	font-family: Trebuchet MS,Lucida Grande,Lucida Sans Unicode,Lucida Sans,Tahoma,sans-serif; 
+}
+
+
+#floorplan-scroll {
+  width: 100%;
+  height: 450px;
+  padding: 10px;
+  overflow-y: scroll;
+  border: rgba(0,0,0,.1) solid 1px;
+}
+
+
+.floorplan-pane {
+  width: 25%;
+  height: 180px;
+  display: inline-block;
+  float: left;
+  margin-bottom: 20px;
+  cursor: pointer;
+}
+
+.thumb-border {
+  width: 90%;
+  height:70%;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.25);
+  margin: 0 auto;
+  transition: box-shadow .2s ease;
+  background: white;
+}
+
+.thumb-border:hover {
+  box-shadow: 0 2px 17px rgba(0, 0, 0, 0.25);
+}
+
+.floorplan-thumb, .newfloorplan-thumb {
+  width: 100%;
+  height: 100%;
+  background:white;
+}
+
+
+.newfloorplan-thumb {
+  font-size: 108px;
+  color: #555;
+  transition: color ease .1s, background ease .1s;
+}
+
+.newfloorplan-thumb {
+  font-size: 108px;
+  color: #555;
+}
+
+.newfloorplan-thumb:hover {
+  font-size: 108px;
+  color: white;
+  background: #014876;
+}
+
+.floorplan-name, .floorplan-creator {
+  margin: 2px;
+}
+
+.floorplan-name {
+  font-size: 18px;
+  margin-top: 4px;
+  color: #014876;
+}
+
+.floorplan-creator{
+  margin-top:0px;
+}

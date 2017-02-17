@@ -1,0 +1,30 @@
+{
+  "name": "wm-brainstorm",
+  "version": "1.0.0",
+  "description": "DE Hack U 5 Student Repository",
+  "main": "index.js",
+  "dependencies": {
+    "bcrypt": "^1.0.2",
+    "body-parser": "^1.16.1",
+    "cors": "^2.8.1",
+    "express": "^4.14.1",
+    "jquery": "^3.1.1",
+    "pg": "^6.1.2",
+    "socket.io": "~1.7.2"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/newOnahtaN/wm-brainstorm.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/newOnahtaN/wm-brainstorm/issues"
+  },
+  "homepage": "https://github.com/newOnahtaN/wm-brainstorm#readme"
+}
