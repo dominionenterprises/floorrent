@@ -387,7 +387,6 @@ var labels = {};
 function addLabel(e, text, opts) {
   text = text || 'room';
   opts = opts || {};
-  console.log(text, opts);
   var text = new fabric.IText(text, Object.assign({
     fontSize: 20,
     fontFamily: 'Trebuchet MS'
