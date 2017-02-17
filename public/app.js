@@ -384,16 +384,41 @@ attachClickHandlers();
 var labelId = 0;
 var labels = {};
 
-function addLabel() {
-  var text = new fabric.IText('room', {
+function addLabel(e, text, opts) {
+  text = text || 'room';
+  opts = opts || {};
+  console.log(text, opts);
+  var text = new fabric.IText(text, Object.assign({
     fontSize: 20,
     fontFamily: 'Trebuchet MS'
-  });
+  }, opts));
   var id = labelId++;
   labels[id] = text;
   text.id = id;
   text.type = 'label';
   canvas.add(text);
+}
+
+function Labels2Model() {
+  var data = [];
+  for (var key in labels) {
+    var label = labels[key];
+    data.push({
+      text: label.text,
+      top: label.getTop(),
+      left: label.getLeft()
+    });
+  }
+  return data;
+}
+
+function Model2Labels(model) {
+  model.forEach(function(label) {
+    addLabel(null, label.text, {
+      top: label.top,
+      left: label.left
+    });
+  });
 }
 
 var iconId = 0;
