@@ -503,17 +503,24 @@ function save() {
   var model = View2Model();
   var tempcanvas = document.getElementById("c");
   var thumbnail = tempcanvas.toDataURL("image/png");
-  $.ajax({
-    url: apihost + '/floorplan/' + floorplan.id,
-    type: 'POST',
-    data: {
-      creator: user.id,
-      name: name,
-      content: model,
-      thumbnail: thumbnail
-    },
-    success: saveCallback
+
+  socket.emit('save', {
+    id: floorplan.id,
+    name: name,
+    content: model,
+    thumbnail: thumbnail
   });
+  //$.ajax({
+  //  url: apihost + '/floorplan/' + floorplan.id,
+  //  type: 'POST',
+  //  data: {
+  //    id: floorplan.id,
+  //    name: name,
+  //    content: model,
+  //    thumbnail: "..."
+  //  },
+  //  success: saveCallback
+  //});
 }
 function saveCallback(data) {
   console.log("great! saved");
@@ -521,7 +528,9 @@ function saveCallback(data) {
 
 
 
-// AUTOSAVING
+// AUTOSAVING, SOCKETS
+var socket = io();
+
 function scheduleSave() {
   saveInterval = MAX_SAVE_INTERVAL;
   console.log('saving after 5 seconds of inactivity...');
