@@ -298,7 +298,7 @@ function other(vert, edge) {
 canvas.on('object:moving', function(options) {
   var obj = options.target;
 
-  if (obj.type === 'icon') {
+  if (obj.type === 'icon' || obj.isIcon)  {
     if (obj.isFixture && !isAdmin) return;
     scheduleSave();
   }
@@ -380,7 +380,7 @@ wrapper.addEventListener('keydown', function(e) {
     scheduleSave();
     if (obj.type === 'label') {
       delete labels[obj.id];
-    } else if (obj.type === 'icon') {
+    } else if (obj.type === 'icon' || obj.isIcon) {
       delete icons[obj.id];
     } else if (obj.type === 'vertex') {
       vertices = vertices.filter(function(el) {
@@ -469,12 +469,13 @@ var iconId = 0;
 var icons = {};
 
 function addIcon(url, isFixture) {
+  var path = url.match(/^(https?\:)\/\/(([^:\/?#]*)(?:\:([0-9]+))?)([\/]{0,1}[^?#]*)(\?[^#]*|)(#.*|)$/)[5];
   fabric.loadSVGFromURL(url, function(objects, options) {
     var obj = fabric.util.groupSVGElements(objects, options);
     var id = iconId++;
     obj.id = id;
     obj.isFixture = isFixture;
-    obj.url = url;
+    obj.url = path;
     icons[id] = obj;
     if (!isAdmin && isFixture) {
       obj.lockMovementX = true;
@@ -500,7 +501,8 @@ function Icons2Model() {
       scaleX: icon.scaleX,
       scaleY: icon.scaleY,
       width: icon.getWidth(),
-      height: icon.getHeight()
+      height: icon.getHeight(),
+      isFixture: icon.isFixture
     });
   }
   return data;
@@ -532,7 +534,11 @@ function loadIcon(model, i) {
     var id = iconId++;
     obj.id = id;
     obj.url = icon.url;
-    obj.type = 'icon';
+    obj.isIcon = true;
+    obj.isFixture = icon.isFixture;
+    if (!isAdmin && obj.isFixture) {
+      obj.set({ selectable: false });
+    }
     icons[id] = obj;
     canvas.add(obj).renderAll();
     loadIcon(model, ++i);
@@ -584,10 +590,8 @@ function loadCallback(data) {
 
   var view = Model2View(model);
   renderView(view);
-  view = Model2Icons(icons);
-  //renderView(view);
-  view = Model2Labels(labels);
-  //renderView(view);
+  Model2Icons(icons);
+  Model2Labels(labels);
 
 }
 
