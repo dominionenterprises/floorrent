@@ -178,7 +178,6 @@ function handleFloorplanPaneClick(e){
   console.log(currfpid);
   var ptag = this.getElementsByClassName("floorplan-name")[0];
   currFloorplanName = ptag.innerHTML;
-  console.log(currFloorplanName);
   floorplan.id = currfpid;
   load();
   closeSelectionBox();

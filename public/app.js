@@ -445,6 +445,8 @@ function Labels2Model() {
 }
 
 function Model2Labels(model) {
+  if (!model)
+    return;
   model.forEach(function(label) {
     addLabel(null, label.text, {
       top: label.top,
@@ -487,13 +489,17 @@ function Icons2Model() {
       top: icon.top,
       left: icon.left,
       scaleX: icon.scaleX,
-      scaleY: icon.scaleY
+      scaleY: icon.scaleY,
+      width: icon.getWidth(),
+      height: icon.getHeight()
     });
   }
   return data;
 }
 
 function Model2Icons(model) {
+  if (!model)
+    return;
   loadIcon(model, 0);
 }
 
@@ -508,7 +514,9 @@ function loadIcon(model, i) {
       top: icon.top,
       left: icon.left,
       scaleX: icon.scaleX,
-      scaleY: icon.scaleY
+      scaleY: icon.scaleY,
+      width: icon.width,
+      height: icon.height
     });
     var id = iconId++;
     obj.id = id;
@@ -563,9 +571,9 @@ function loadCallback(data) {
   var view = Model2View(model);
   renderView(view);
   view = Model2Icons(icons);
-  renderView(view);
+  //renderView(view);
   view = Model2Labels(labels);
-  renderView(view);
+  //renderView(view);
 
 }
 
@@ -584,23 +592,7 @@ function save() {
     labels: labelsModel,
     icons: iconsModel
   });
-  //$.ajax({
-  //  url: apihost + '/floorplan/' + floorplan.id,
-  //  type: 'POST',
-  //  data: {
-  //    id: floorplan.id,
-  //    name: name,
-  //    content: model,
-  //    thumbnail: "..."
-  //  },
-  //  success: saveCallback
-  //});
 }
-//function saveCallback(data) {
-//  console.log("great! saved");
-//}
-
-
 
 // AUTOSAVING, SOCKETS
 var socket = io();
@@ -627,6 +619,21 @@ function checkForSave() {
   }
 }
 setInterval(checkForSave, 1000);
+
+socket.on('update', function(data) {
+  console.log('got update');
+  console.log(data.content);
+  if (data.fpid === floorplan.id) {
+    var model = JSON.parse(data.content);
+    var view = Model2View(model);
+    // clear and render
+    for (var i = 0; i < vertices.length; i++) canvas.remove(vertices[i]);
+    for (var i = 0; i < edges.length; i++) canvas.remove(edges[i]);
+    vertices = [];
+    edges = [];
+    renderView(view);
+  } 
+});
 
 
 
