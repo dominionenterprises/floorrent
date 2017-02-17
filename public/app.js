@@ -13,7 +13,7 @@ var floorplan = {
   created: false
 };
 
-var apihost = "https://brainstorm-backend.herokuapp.com";
+var apihost = "http://brainstorm-backend.herokuapp.com";
 
 // create fabric canvas
 var canvas = new fabric.Canvas('c', {
@@ -264,7 +264,7 @@ canvas.on('mouse:down', function(options) {
   if (!lineDrawingMode)
     return;
   // complete a line or start a new one
-  if (!options.target || !options.target.selectable) {
+  if (isAdmin && (!options.target || !options.target.selectable)) {
     var x = roundToGrid(options.e.offsetX);
     var y = roundToGrid(options.e.offsetY);
 
@@ -286,7 +286,7 @@ canvas.on('object:selected', function(options) {
       canvas.setActiveObject(vert);
     } else {
       // start temp line from target
-      startTempLine(options.target);
+      if (isAdmin) startTempLine(options.target);
     }
   }
 });
@@ -297,11 +297,16 @@ function other(vert, edge) {
 
 canvas.on('object:moving', function(options) {
   var obj = options.target;
-  if (obj.type === 'vertex' || obj.type === 'icon') {
+
+  if (obj.type === 'icon') {
+    if (obj.isFixture && !isAdmin) return;
     scheduleSave();
   }
 
   if (obj.type === 'vertex') {
+    if (!isAdmin) return;
+    scheduleSave();
+
     var vert = options.target;
 
     // snap to grid
@@ -341,20 +346,22 @@ canvas.on('mouse:move', function(options) {
   }
 
   // check for vertices to color
-  for (var i = 0; i < vertices.length; i++) {
-    var vert = vertices[i];
-    if (Math.dist(vert.left, vert.top, options.e.offsetX, options.e.offsetY) < 50
-        || canvas.getActiveObject() === vert) {
-      vert.set({
-        opacity: 1,
-        selectable: true
-      });
-      canvas.bringToFront(vert);
-    } else {
-      vert.set({
-        opacity: 0,
-        selectable: false
-      });
+  if (isAdmin) {
+    for (var i = 0; i < vertices.length; i++) {
+      var vert = vertices[i];
+      if (Math.dist(vert.left, vert.top, options.e.offsetX, options.e.offsetY) < 50
+          || canvas.getActiveObject() === vert) {
+        vert.set({
+          opacity: 1,
+          selectable: true
+        });
+        canvas.bringToFront(vert);
+      } else {
+        vert.set({
+          opacity: 0,
+          selectable: false
+        });
+      }
     }
   }
 
@@ -504,6 +511,8 @@ function Model2Icons(model) {
 }
 
 function loadIcon(model, i) {
+  if (!model)
+    return;
   if (i >= model.length)
     return;
   var icon = model[i];
@@ -632,7 +641,7 @@ socket.on('update', function(data) {
     vertices = [];
     edges = [];
     renderView(view);
-  } 
+  }
 });
 
 
