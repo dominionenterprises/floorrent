@@ -179,20 +179,22 @@ function createFloorplan(creator, name, content, thumbnail) {
 
 app.post("/floorplan/:id", function(req, res){
   content = JSON.stringify(req.body.content);
+  icons = JSON.stringify(req.body.icons);
+  labels = JSON.stringify(req.body.labels);
   name = req.body.name;
   thumbnail = req.body.thumbnail;
   id = parseInt(req.params.id);
-  saveFloorplan(content, name, thumbnail, id).then(function(result) {
+  saveFloorplan(content, name, thumbnail, id, icons, labels).then(function(result) {
     res.send(result);
   });
 });
-function saveFloorplan(content, name, thumbnail, id) {
+function saveFloorplan(content, name, thumbnail, id, icons, labels) {
   return new Promise(function(resolve, reject) {
     pool.connect(function(err, client, done) {
       if(err) {
         reject(new Error('error fetching client from pool'));
       }
-      client.query("UPDATE floorplans SET content=$1, name=$2, thumbnail=$3 WHERE fpid=$4", [content, name, thumbnail, id], function(err, result) {
+      client.query("UPDATE floorplans SET content=$1, name=$2, thumbnail=$3, icons=$4, labels=$5 WHERE fpid=$6", [content, name, thumbnail, icons, labels, id], function(err, result) {
         done();
         if(err) {
           reject(new Error('error running query'));

@@ -73,6 +73,8 @@ function View2Model() {
 }
 
 function Model2View(model) {
+  if (!model)
+    return;
   var vs = []
   var es = []
   var seenVertices = {};
@@ -562,14 +564,18 @@ function loadCallback(data) {
 
 function save() {
   var model = View2Model();
+  var iconsModel = Icons2Model();
+  var labelsModel = Labels2Model();
   var tempcanvas = document.getElementById("c");
   var thumbnail = tempcanvas.toDataURL("image/png");
 
   socket.emit('save', {
     id: floorplan.id,
-    name: name,
+    name: currFloorplanName,
     content: model,
-    thumbnail: thumbnail
+    thumbnail: thumbnail,
+    labels: labelsModel,
+    icons: iconsModel
   });
   //$.ajax({
   //  url: apihost + '/floorplan/' + floorplan.id,
@@ -667,5 +673,5 @@ function toggleLineDrawing(){
     $("#placeLineButton").toggleClass('depressed');
     lineDrawingMode = true;
   }
-  
+
 }

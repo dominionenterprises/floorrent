@@ -107,8 +107,8 @@ function registerButtonClick(e){
   }, function(data){
     console.log(data);
     if (data.status == 200){
-      closeLoginBox();
       isAdmin = true;
+      closeLoginBox();
     } else {
       makeRegisterRed();
     }
@@ -116,6 +116,10 @@ function registerButtonClick(e){
 }
 
 function guestButtonClick(e){
+  var newButton = document.getElementById("newFloorplanPane");
+  newButton.style.display = "none";
+  $("#fixture-container").remove();
+  $("#fixture-title").remove();
   closeLoginBox();
 }
 
@@ -151,19 +155,18 @@ function loadAvailableFloorplans(){
       pane.addEventListener("click", handleFloorplanPaneClick);
     }
   });
-  if (isAdmin){
-    pane = document.createElement("div");
-    pane.setAttribute("class", "floorplan-pane");
-    border = document.createElement("div");
-    border.setAttribute("class", "thumb-border");
-    thumb = document.createElement("div");
-    thumb.setAttribute("class", "newfloorplan-thumb");
-    thumb.innerHTML = "+";
-    border.appendChild(thumb);
-    pane.appendChild(border);
-    floorplanScroll.appendChild(pane);
-    pane.addEventListener("click", handleNewFloorplanPaneClick);
-  }
+  pane = document.createElement("div");
+  pane.setAttribute("id", "newFloorplanPane");
+  pane.setAttribute("class", "floorplan-pane");
+  border = document.createElement("div");
+  border.setAttribute("class", "thumb-border");
+  thumb = document.createElement("div");
+  thumb.setAttribute("class", "newfloorplan-thumb");
+  thumb.innerHTML = "+";
+  border.appendChild(thumb);
+  pane.appendChild(border);
+  floorplanScroll.appendChild(pane);
+  pane.addEventListener("click", handleNewFloorplanPaneClick);
 }
 
 function handleFloorplanPaneClick(e){
