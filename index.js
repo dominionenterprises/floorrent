@@ -9,7 +9,7 @@ server.listen(port);
 var path = require('path');
 var bodyParser = require('body-parser')
 var cors = require('cors');
-app.use(bodyParser.json());
+app.use(bodyParser.json({limit: '5mb'}));
 app.use(bodyParser.urlencoded({ extended: true }));
 
 /*
