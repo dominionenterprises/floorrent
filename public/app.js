@@ -10,8 +10,9 @@ var edges = [];
 var gridLines = [];
 
 var wrapper = document.getElementById('canvasWrapper');
+
 var grid = 25;
-var gridSize = 800;
+var gridSize = canvas.width;
 var vertexRadius = 10;
 var useGrid = true;
 var ORANGE = '#ec7200';
@@ -26,6 +27,16 @@ var tempLine = new fabric.Line([0, 0, 0, 0,], {
   strokeWidth: 3,
   selectable: false
 });
+
+window.addEventListener('resize', resizeCanvas, false);
+function resizeCanvas() {
+  canvas.setWidth(wrapper.offsetWidth);
+  canvas.setHeight(wrapper.offsetHeight);
+  canvas.renderAll();
+  gridSize = wrapper.offsetWidth;
+  updateGrid(grid);
+}
+resizeCanvas();
 
 function View2Model() {
   return edges.map(function(e) {
@@ -180,7 +191,6 @@ function drawGrid() {
     canvas.sendToBack(row);
   }
 }
-drawGrid();
 
 function clearGrid() {
   for (var i = 0; i < gridLines.length; i++) {
