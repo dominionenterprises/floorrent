@@ -360,7 +360,8 @@ function addIcon(url) {
 function create() {
   var model = View2Model();
   var name = 'test name';
-  //TODO: thumbnail
+  var tempcanvas = document.getElementById("c");
+  var thumbnail = tempcanvas.toDataURL("image/png");
 
   $.ajax({
     url: apihost + '/floorplan',
@@ -369,7 +370,7 @@ function create() {
       creator: userId,
       name: name,
       content: model,
-      thumbnail: "..."
+      thumbnail: thumbnail
     },
     success: createCallback
   });
@@ -399,7 +400,8 @@ function loadCallback(data) {
 
 function save() {
   var model = View2Model();
-
+  var tempcanvas = document.getElementById("c");
+  var thumbnail = tempcanvas.toDataURL("image/png");
   $.ajax({
     url: apihost + '/floorplan/' + floorplanId,
     type: 'POST',
@@ -407,7 +409,7 @@ function save() {
       creator: userId,
       name: name,
       content: model,
-      thumbnail: "..."
+      thumbnail: thumbnail
     },
     success: saveCallback
   });

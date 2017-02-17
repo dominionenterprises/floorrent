@@ -16,7 +16,6 @@ function openSelectionBox(){
   setTimeout(function(){
     selectionBox.style.opacity = "1";
     selectionBox.style.marginTop = "19vh";
-    closeSelectionBox();
   }, 10);
 }
 
@@ -113,6 +112,42 @@ function adminButtonClick(e){
   openAdminContainer();
 }
 
+function loadAvailableFloorplans(){
+  var floorplanScroll = document.getElementById("floorplan-scroll");
+  $.get(apihost + "/floorplan", function(data){
+    var floorplans = data;
+    var floorplan, pane, border, thumb, name, creator;
+    for (var i=0; i<floorplans.length; i++){
+      floorplan = floorplans[i];
+      pane = document.createElement("div");
+      pane.setAttribute("class", "floorplan-pane");
+      pane.setAttribute("data-id", floorplan.fpid);
+      border = document.createElement("div");
+      border.setAttribute("class", "thumb-border");
+      thumb = document.createElement("img");
+      thumb.setAttribute("class", "floorplan-thumb");
+      thumb.setAttribute("src", floorplan.thumbnail)
+      name = document.createElement("p");
+      name.setAttribute("class", "floorplan-name");
+      name.innerHTML = floorplan.name;
+      creator = document.createElement("p");
+      creator.setAttribute("class", "floorplan-creator");
+      border.appendChild(thumb);
+      pane.appendChild(border);
+      pane.appendChild(name);
+      pane.appendChild(creator);
+      floorplanScroll.appendChild(pane);
+      pane.addEventListener("click", handleFloorplanPaneClick);
+    }
+  });
+  
+  //TODO: Add 'create new' button
+}
+
+function handleFloorplanPaneClick(e){
+  console.log(e.target);
+}
+
 function pageRefresh(){
   var loginButton = document.getElementById("login-button");
   loginButton.addEventListener("click", loginButtonClick);
@@ -122,6 +157,7 @@ function pageRefresh(){
   guestButton.addEventListener("click", guestButtonClick);
   var adminButton = document.getElementById("admin-button");
   adminButton.addEventListener("click", adminButtonClick);
+  loadAvailableFloorplans();
 }
 
 document.addEventListener("DOMContentLoaded", pageRefresh);
