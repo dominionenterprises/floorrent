@@ -291,7 +291,12 @@ function other(vert, edge) {
 }
 
 canvas.on('object:moving', function(options) {
-  if (options.target.type === 'vertex') {
+  var obj = options.target;
+  if (obj.type === 'vertex' || obj.type === 'icon') {
+    scheduleSave();
+  }
+
+  if (obj.type === 'vertex') {
     var vert = options.target;
 
     // snap to grid
@@ -358,6 +363,7 @@ wrapper.addEventListener('keydown', function(e) {
     canvas.deactivateAll();
   } else if (e.key == 'Backspace') {
     var obj = canvas.getActiveObject();
+    scheduleSave();
     if (obj.type === 'label') {
       delete labels[obj.id];
     } else if (obj.type === 'icon') {
@@ -395,7 +401,7 @@ function attachClickHandlers() {
   var imgs = document.getElementsByClassName('icon-image');
   for (var i = 0; i < imgs.length; i++) {
     var img = imgs[i];
-    img.onclick = addIcon.bind(this, img.src);
+    img.onclick = addIcon.bind(this, img.src, $(img).hasClass('fixture'));
   }
   var placeTextButton = document.getElementById('placeTextButton');
   placeTextButton.onclick = addLabel;
@@ -446,11 +452,12 @@ var iconId = 0;
 
 var icons = {};
 
-function addIcon(url) {
+function addIcon(url, isFixture) {
   fabric.loadSVGFromURL(url, function(objects, options) {
     var obj = fabric.util.groupSVGElements(objects, options);
     var id = iconId++;
     obj.id = id;
+    obj.isFixture = isFixture;
     obj.url = url;
     icons[id] = obj;
     canvas.add(obj).renderAll();
@@ -522,10 +529,8 @@ function create() {
   });
 }
 function createCallback(data) {
-  console.log(data);
   floorplan.id = data.fpid;
   floorplan.created = true;
-  console.log('created ' + floorplan.id);
 }
 
 function load() {
@@ -536,13 +541,10 @@ function load() {
   });
 }
 function loadCallback(data) {
-  console.log(data);
   var model = JSON.parse(data.content);
-  console.log(model);
   floorplan.id = data.fpid;
   floorplan.created = true;
   floorplan.name = data.name;
-  floorplan.id = data.id;
 
   var view = Model2View(model);
   renderView(view);
@@ -597,15 +599,31 @@ function checkForSave() {
 }
 setInterval(checkForSave, 1000);
 
-$( function() {
-    $( "#slider" ).slider({
-      value:1,
-      min: 0,
-      max: 3,
-      step: 1,
-      slide: function( event, ui ) {
-        $( "#amount" ).val( "$" + ui.value );
+$(function() {
+  $("#slider").slider({
+    value:1,
+    min: 0,
+    max: 3,
+    step: 1,
+    slide: function(event, ui) {
+      $("#amount").val("$" + ui.value);
+    },
+    change: function(e, ui) {
+      switch (ui.value) {
+        case 0:
+          updateGrid(40);
+          break;
+        case 1:
+          updateGrid(20);
+          break;
+        case 2:
+          updateGrid(10);
+          break;
+        case 3:
+          updateGrid(5);
+          break;
       }
-    });
-    $( "#amount" ).val( "$" + $( "#slider" ).slider( "value" ) );
-  } );
+    }
+  });
+  $("#amount").val("$" + $("#slider").slider("value"));
+});
