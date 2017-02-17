@@ -550,3 +550,15 @@ function checkForSave() {
 }
 setInterval(checkForSave, 1000);
 
+$( function() {
+    $( "#slider" ).slider({
+      value:1,
+      min: 0,
+      max: 3,
+      step: 1,
+      slide: function( event, ui ) {
+        $( "#amount" ).val( "$" + ui.value );
+      }
+    });
+    $( "#amount" ).val( "$" + $( "#slider" ).slider( "value" ) );
+  } );
