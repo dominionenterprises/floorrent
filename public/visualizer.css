@@ -19,6 +19,16 @@ body {
     color: #E7E7E7;
 }
 
+#logo {
+  padding: 20px;
+}
+
+#name {
+  color: #E7E7E7;
+  padding: 23px;
+  position:fixed;
+}
+
 .slider {
 	margin: 5 0 30 34;
 	width: 230px;
