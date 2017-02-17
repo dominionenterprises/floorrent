@@ -613,10 +613,11 @@ setInterval(checkForSave, 1000);
 
 // SLIDER
 $(function() {
+  var handle = $( "#custom-handle" );
   $("#slider").slider({
     value:1,
     min: 0,
-    max: 3,
+    max: 2,
     step: 1,
     slide: function(event, ui) {
       $("#amount").val("$" + ui.value);
@@ -627,16 +628,38 @@ $(function() {
           updateGrid(40);
           break;
         case 1:
-          updateGrid(20);
+          updateGrid(25);
           break;
         case 2:
           updateGrid(10);
-          break;
-        case 3:
-          updateGrid(5);
           break;
       }
     }
   });
   $("#amount").val("$" + $("#slider").slider("value"));
 });
+
+var lineDrawingMode = true;
+$("#placeLineButton").toggleClass('depressed');
+
+
+function activateLineDrawingMode(){
+  if (!lineDrawingMode) {
+    $("#placeLineButton").toggleClass('depressed');
+    lineDrawingMode = true;
+  }
+}
+
+
+function toggleLineDrawing(){
+  if (lineDrawingMode) {
+    clearTempLine();
+    canvas.deactivateAll();
+    $("#placeLineButton").toggleClass('depressed');
+    lineDrawingMode = false
+  } else {
+    $("#placeLineButton").toggleClass('depressed');
+    lineDrawingMode = true;
+  }
+  
+}
