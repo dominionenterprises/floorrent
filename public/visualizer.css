@@ -13,6 +13,15 @@ body {
 	position: fixed;
 }
 
+.slider {
+	margin: 5 0 30 34;
+	width: 230px;
+}
+
+.ui-slider-handle {
+	width: 40px;
+}
+
 .content {
         margin-top: 65px;
 }
@@ -56,7 +65,7 @@ body {
 
 .icon-box-label {
 	text-align: center;
-	margin: 20px 0 0 0;
+	margin: 28px 0 8 0;
 }
 
 #canvasWrapper {
@@ -69,7 +78,7 @@ body {
 }
 
 .fixtures-box {
-	height: 38%;
+	height: 30%;
 	width: 90%;
 	background-color: #E7E7E7;
 	overflow-y: scroll;
@@ -80,7 +89,7 @@ body {
 }
 
 .furniture-box {
-	height: 38%;
+	height: 30%;
 	width: 90%;
 	background-color: #E7E7E7;
 	overflow-y: scroll;
