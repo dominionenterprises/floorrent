@@ -342,6 +342,12 @@ io.on('connection', function(socket) {
     var thumbnail = data.thumbnail;
     var id = data.id;
     saveFloorplan(content, name, thumbnail, id);
+
+    // send updates to admins
+    io.sockets.emit('update', {
+      content: content,
+      fpid: id
+    });
   });
 
   socket.on('create', function(data) {
