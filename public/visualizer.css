@@ -321,12 +321,20 @@ pre {
 
 .thumb-border:hover {
   box-shadow: 0 2px 17px rgba(0, 0, 0, 0.25);
+  background: white;
 }
 
 .floorplan-thumb, .newfloorplan-thumb {
   width: 100%;
   height: 100%;
   background:white;
+}
+
+.newfloorplan-thumb {
+  width: 108px;
+  height: 108px;
+  margin: auto;
+  margin-top: 10px;
 }
 
 .floorplan-name, .floorplan-creator {
