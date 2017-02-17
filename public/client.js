@@ -1,5 +1,6 @@
 var apihost = "https://brainstorm-backend.herokuapp.com";
 var isAdmin = false;
+var currFloorplanName = "";
 
 function closeLoginBox(){
   var loginBox = document.getElementById("login");
@@ -152,17 +153,19 @@ function loadAvailableFloorplans(){
     }
   });
 
-  pane = document.createElement("div");
-  pane.setAttribute("class", "floorplan-pane");
-  border = document.createElement("div");
-  border.setAttribute("class", "thumb-border");
-  thumb = document.createElement("div");
-  thumb.setAttribute("class", "newfloorplan-thumb");
-  thumb.innerHTML = "+";
-  border.appendChild(thumb);
-  pane.appendChild(border);
-  floorplanScroll.appendChild(pane);
-  pane.addEventListener("click", handleNewFloorplanPaneClick);
+  if (isAdmin){
+    pane = document.createElement("div");
+    pane.setAttribute("class", "floorplan-pane");
+    border = document.createElement("div");
+    border.setAttribute("class", "thumb-border");
+    thumb = document.createElement("div");
+    thumb.setAttribute("class", "newfloorplan-thumb");
+    thumb.innerHTML = "+";
+    border.appendChild(thumb);
+    pane.appendChild(border);
+    floorplanScroll.appendChild(pane);
+    pane.addEventListener("click", handleNewFloorplanPaneClick);
+  }
 }
 
 function handleFloorplanPaneClick(e){
@@ -176,16 +179,32 @@ function handleFloorplanPaneClick(e){
 
 function handleNewFloorplanPaneClick(e){
   console.log("NEW FLOORPLAN");
-  //TODO: Bring up a name box
   setTimeout(openNameBox, 250);
+}
+
+function handleNewSubmit(e){
+  var newFpName = document.getElementById("newfpname").value;
+  currFloorplanName = newFpName;
+  create();
+  closeNameBox();
 }
 
 function openNameBox(){
   var nameBox = document.getElementById("newname-box");
+  var newFpName = document.getElementById("newfpname");
   nameBox.style.display = "inherit";
   setTimeout(function(){
     nameBox.style.opacity = "1";
+    newFpName.focus();
   }, 10);
+}
+
+function closeNameBox(){
+  var nameBox = document.getElementById("newname-box");
+  nameBox.style.opacity = "0";
+  setTimeout(function(){
+    nameBox.style.display = "none";
+  }, 250);
 }
 
 function closeNameBox(){
@@ -202,6 +221,8 @@ function pageRefresh(){
   var adminButton = document.getElementById("admin-button");
   adminButton.addEventListener("click", adminButtonClick);
   loadAvailableFloorplans();
+  var newSubmitButton = document.getElementById("newsubmit");
+  newSubmitButton.addEventListener("click", handleNewSubmit);
 }
 
 document.addEventListener("DOMContentLoaded", pageRefresh);

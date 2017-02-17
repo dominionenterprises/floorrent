@@ -52,7 +52,7 @@ function resizeCanvas() {
   canvas.setWidth(wrapper.offsetWidth);
   canvas.setHeight(wrapper.offsetHeight);
   canvas.renderAll();
-  gridSize = wrapper.offsetWidth;
+  gridSize = wrapper.offsetWidth > wrapper.offsetHeight ? wrapper.offsetWidth : wrapper.offsetHeight;
   updateGrid(grid);
 }
 resizeCanvas();
@@ -522,7 +522,7 @@ function loadIcon(model, i) {
 // API CALLS HERE WOOOOOOOO
 function create() {
   var model = View2Model();
-  var name = 'test name';
+  var name = currFloorplanName;
   var tempcanvas = document.getElementById("c");
   var thumbnail = tempcanvas.toDataURL("image/png");
 
@@ -591,9 +591,11 @@ function save() {
 
 // AUTOSAVING, SOCKETS
 var socket = io();
+var saveDiv = $('#save');
 
 function scheduleSave() {
   saveInterval = MAX_SAVE_INTERVAL;
+  saveDiv.text('Saving changes...');
 }
 
 var saveInterval = 0;
@@ -602,6 +604,7 @@ function checkForSave() {
   if (saveInterval == 1) {
     console.log('saving');
     if (floorplan.created) save();
+    saveDiv.text('All changes saved.');
   }
 
   if (saveInterval > 0) saveInterval--;
@@ -612,10 +615,11 @@ setInterval(checkForSave, 1000);
 
 // SLIDER
 $(function() {
+  var handle = $( "#custom-handle" );
   $("#slider").slider({
     value:1,
     min: 0,
-    max: 3,
+    max: 2,
     step: 1,
     slide: function(event, ui) {
       $("#amount").val("$" + ui.value);
@@ -626,16 +630,38 @@ $(function() {
           updateGrid(40);
           break;
         case 1:
-          updateGrid(20);
+          updateGrid(25);
           break;
         case 2:
           updateGrid(10);
-          break;
-        case 3:
-          updateGrid(5);
           break;
       }
     }
   });
   $("#amount").val("$" + $("#slider").slider("value"));
 });
+
+var lineDrawingMode = true;
+$("#placeLineButton").toggleClass('depressed');
+
+
+function activateLineDrawingMode(){
+  if (!lineDrawingMode) {
+    $("#placeLineButton").toggleClass('depressed');
+    lineDrawingMode = true;
+  }
+}
+
+
+function toggleLineDrawing(){
+  if (lineDrawingMode) {
+    clearTempLine();
+    canvas.deactivateAll();
+    $("#placeLineButton").toggleClass('depressed');
+    lineDrawingMode = false
+  } else {
+    $("#placeLineButton").toggleClass('depressed');
+    lineDrawingMode = true;
+  }
+  
+}
