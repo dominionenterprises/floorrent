@@ -145,7 +145,11 @@ function loadAvailableFloorplans(){
 }
 
 function handleFloorplanPaneClick(e){
-  console.log(e.target);
+  var currfpid = this.getAttribute("data-id");
+  console.log(currfpid);
+  floorplanId = currfpid;
+  load();
+  closeSelectionBox();
 }
 
 function pageRefresh(){
