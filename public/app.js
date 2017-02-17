@@ -15,26 +15,31 @@ var floorplan = {
 
 var apihost = "https://brainstorm-backend.herokuapp.com";
 
+// create fabric canvas
 var canvas = new fabric.Canvas('c', {
   selection: false,
   preserveObjectStacking: true
 });
 
+// global containers
 var vertices = [];
 var edges = [];
 var gridLines = [];
 
 var wrapper = document.getElementById('canvasWrapper');
 
+// grid variables
 var grid = 25;
 var gridSize = canvas.width;
 var vertexRadius = 10;
 var useGrid = true;
 var ORANGE = '#ec7200';
 
+// edge and vertex id's (incremented)
 var edgeId = 0, vertexId = 0;
 var selected;
 
+// temp line globals
 var showTempLine = false;
 var tempLineStartVertex;
 var tempLine = new fabric.Line([0, 0, 0, 0,], {
@@ -53,6 +58,9 @@ function resizeCanvas() {
 }
 resizeCanvas();
 
+
+
+// SERIALIZING VIEWS AND MODELS
 function View2Model() {
   return edges.map(function(e) {
     return {
@@ -133,7 +141,11 @@ Math.dist=function(x1,y1,x2,y2){
   return Math.sqrt((x2-x1)*(x2-x1)+(y2-y1)*(y2-y1));
 }
 
+
+
+// VERTEX, EDGE CLASSES
 function createVertex(x, y) {
+  scheduleSave();
   var vert = new Vertex(x, y);
   vertices.push(vert);
   canvas.add(vert);
@@ -160,6 +172,7 @@ function Vertex(x, y) {
 }
 
 function createEdge(v1, v2) {
+  scheduleSave();
   var edge = new Edge(v1, v2);
   edges.push(edge);
   edge.vertices[0].edges.push(edge);
@@ -187,11 +200,9 @@ function Edge(v1, v2) {
   return line;
 }
 
-function roundToGrid(n) {
-  return Math.round(n / grid) * grid;
-}
 
-// start temp line from vertex
+
+// TEMP LINE (for placing walls)
 function startTempLine(vert) {
   tempLineStartVertex = vert;
   showTempLine = true;
@@ -205,7 +216,13 @@ function clearTempLine() {
   canvas.renderAll();
 }
 
-// create grid
+
+
+// GRID STUFF
+function roundToGrid(n) {
+  return Math.round(n / grid) * grid;
+}
+
 function drawGrid() {
   for (var i = 0; i <= (gridSize/grid); i++) {
     var column = new fabric.Line([i*grid, 0, i*grid, gridSize], { stroke: '#eee', selectable: false});
@@ -364,6 +381,8 @@ function addIcon(url) {
   });
 }
 
+
+
 // API CALLS HERE WOOOOOOOO
 function create() {
   var model = View2Model();
@@ -385,6 +404,7 @@ function create() {
 function createCallback(data) {
   console.log(data);
   floorplan.id = data.fpid;    
+  floorplan.created = true;
   console.log('created ' + floorplan.id);
 }
 
@@ -423,3 +443,26 @@ function save() {
 function saveCallback(data) {
   console.log("great! saved"); 
 }
+
+
+
+// AUTOSAVING
+function scheduleSave() {
+  saveInterval = MAX_SAVE_INTERVAL;
+  console.log('saving after 5 seconds of inactivity...');
+}
+
+var saveInterval = 0;
+var MAX_SAVE_INTERVAL = 5;
+function checkForSave() {
+  if (saveInterval == 1) {
+    console.log('saving');
+    if (floorplan.created) save();
+    else console.log('not saving, floorplan not created');
+  }
+
+  if (saveInterval > 0) saveInterval--;
+  console.log(saveInterval + '...');
+}
+setInterval(checkForSave, 1000);
+
