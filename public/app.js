@@ -574,15 +574,31 @@ function checkForSave() {
 }
 setInterval(checkForSave, 1000);
 
-$( function() {
-    $( "#slider" ).slider({
-      value:1,
-      min: 0,
-      max: 3,
-      step: 1,
-      slide: function( event, ui ) {
-        $( "#amount" ).val( "$" + ui.value );
+$(function() {
+  $("#slider").slider({
+    value:1,
+    min: 0,
+    max: 3,
+    step: 1,
+    slide: function(event, ui) {
+      $("#amount").val("$" + ui.value);
+    },
+    change: function(e, ui) {
+      switch (ui.value) {
+        case 0:
+          updateGrid(40);
+          break;
+        case 1:
+          updateGrid(20);
+          break;
+        case 2:
+          updateGrid(10);
+          break;
+        case 3:
+          updateGrid(5);
+          break;
       }
-    });
-    $( "#amount" ).val( "$" + $( "#slider" ).slider( "value" ) );
-  } );
+    }
+  });
+  $("#amount").val("$" + $("#slider").slider("value"));
+});
