@@ -569,7 +569,7 @@ function save() {
 
   socket.emit('save', {
     id: floorplan.id,
-    name: name,
+    name: currFloorplanName,
     content: model,
     thumbnail: thumbnail,
     labels: labelsModel,
