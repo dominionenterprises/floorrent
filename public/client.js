@@ -118,6 +118,9 @@ function registerButtonClick(e){
 function guestButtonClick(e){
   $("#fixture-container").remove();
   $("#fixture-title").remove();
+  $("#placeLineButton").remove();
+  $("#placeTextButton").remove();
+  $("#panButton").css("width", "90%")
   closeLoginBox();
 }
 
