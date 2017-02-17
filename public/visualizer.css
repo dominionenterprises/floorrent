@@ -13,20 +13,27 @@ body {
 	position: fixed;
 }
 
+
 #save {
-    float: right;
+    float: left;
     padding: 23px;
     color: #E7E7E7;
 }
 
 #logo {
   padding: 20px;
+  float: right;
+  margin-top: -7px;
 }
 
 #name {
   color: #E7E7E7;
   padding: 23px;
-  position:fixed;
+  float: left;
+  margin-top: -10px;
+  margin-left: 10px;
+  font-size: 30px;
+
 }
 
 .slider {
