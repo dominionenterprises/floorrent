@@ -13,6 +13,12 @@ body {
 	position: fixed;
 }
 
+#save {
+    float: right;
+    padding: 23px;
+    color: #E7E7E7;
+}
+
 .slider {
 	margin: 5 0 30 34;
 	width: 230px;

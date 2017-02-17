@@ -341,12 +341,7 @@ io.on('connection', function(socket) {
     var name = data.name;
     var thumbnail = data.thumbnail;
     var id = data.id;
-    saveFloorplan(content, name, thumbnail, id).then(
-      function (data) {
-        console.log(data);
-      }, function (err) {
-        console.log(err.message);
-      });
+    saveFloorplan(content, name, thumbnail, id);
   });
 
   socket.on('create', function(data) {

@@ -52,7 +52,7 @@ function resizeCanvas() {
   canvas.setWidth(wrapper.offsetWidth);
   canvas.setHeight(wrapper.offsetHeight);
   canvas.renderAll();
-  gridSize = wrapper.offsetWidth;
+  gridSize = wrapper.offsetWidth > wrapper.offsetHeight ? wrapper.offsetWidth : wrapper.offsetHeight;
   updateGrid(grid);
 }
 resizeCanvas();
@@ -72,6 +72,8 @@ function View2Model() {
 }
 
 function Model2View(model) {
+  if (!model)
+    return;
   var vs = []
   var es = []
   var seenVertices = {};
@@ -593,9 +595,11 @@ function save() {
 
 // AUTOSAVING, SOCKETS
 var socket = io();
+var saveDiv = $('#save');
 
 function scheduleSave() {
   saveInterval = MAX_SAVE_INTERVAL;
+  saveDiv.text('Saving changes...');
 }
 
 var saveInterval = 0;
@@ -604,6 +608,7 @@ function checkForSave() {
   if (saveInterval == 1) {
     console.log('saving');
     if (floorplan.created) save();
+    saveDiv.text('All changes saved.');
   }
 
   if (saveInterval > 0) saveInterval--;
@@ -662,5 +667,5 @@ function toggleLineDrawing(){
     $("#placeLineButton").toggleClass('depressed');
     lineDrawingMode = true;
   }
-  
+
 }

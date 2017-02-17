@@ -118,6 +118,8 @@ function registerButtonClick(e){
 function guestButtonClick(e){
   var newButton = document.getElementById("newFloorplanPane");
   newButton.style.display = "none";
+  $("#fixture-container").remove();
+  $("#fixture-title").remove();
   closeLoginBox();
 }
 
