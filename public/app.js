@@ -413,9 +413,5 @@ function save() {
   });
 }
 function saveCallback(data) {
-<<<<<<< HEAD
   console.log("great! saved"); 
-=======
-
->>>>>>> 79b379ddfe31b216a60af85499bbe337e7d73f3c
 }
