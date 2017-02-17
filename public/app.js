@@ -460,6 +460,14 @@ function addIcon(url, isFixture) {
     obj.isFixture = isFixture;
     obj.url = url;
     icons[id] = obj;
+    if (!isAdmin && isFixture) {
+      obj.lockMovementX = true;
+      obj.lockMovementY = true;
+      obj.lockScalingX = true;
+      obj.lockScalingY = true;
+      obj.lockUniScaling = true;
+      obj.lockRotation = true;
+    }
     canvas.add(obj).renderAll();
   });
 }
