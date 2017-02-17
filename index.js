@@ -89,10 +89,10 @@ app.post("/register", function(req, res){
       }
       bcrypt.hash(password, saltRounds, function(err, hash) {
         console.log(hash.length);
-        client.query("INSERT INTO users (username, password, access) VALUES($1, $2, 2)", [username, hash], function(err, result) {
-          console.log("NEW USER");
+        client.query("INSERT INTO users (uuid, username, password, access) VALUES(DEFAULT, $1, $2, 2) RETURNING uuid", [username, hash], function(err, result) {
+          uuid = result.rows[0].uuid;
           if (err) console.log(err);
-          res.send(result);
+          res.send({status: 200, message:{uuid:uuid}});
         });
       });
     });
@@ -163,12 +163,14 @@ app.post("/floorplan/", function(req, res){
 
 app.post("/floorplan/:id", function(req, res){
   content = req.body.content;
+  name = req.body.name;
+  thumbnail = req.body.thumbnail;
   id = parseInt(req.params.id);
   pool.connect(function(err, client, done) {
     if(err) {
       return console.error('error fetching client from pool', err);
     }
-    client.query("UPDATE floorplans SET content=$1 WHERE fpid=$2", [content, id], function(err, result) {
+    client.query("UPDATE floorplans SET content=$1, name=$2, thumbnail=$3 WHERE fpid=$4", [content, name, thumbnail, id], function(err, result) {
       if(err) {
         return console.error('error running query', err);
       }

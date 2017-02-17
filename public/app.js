@@ -10,8 +10,9 @@ var edges = [];
 var gridLines = [];
 
 var wrapper = document.getElementById('canvasWrapper');
+
 var grid = 25;
-var gridSize = 800;
+var gridSize = canvas.width;
 var vertexRadius = 10;
 var useGrid = true;
 var ORANGE = '#ec7200';
@@ -26,6 +27,16 @@ var tempLine = new fabric.Line([0, 0, 0, 0,], {
   strokeWidth: 3,
   selectable: false
 });
+
+window.addEventListener('resize', resizeCanvas, false);
+function resizeCanvas() {
+  canvas.setWidth(wrapper.offsetWidth);
+  canvas.setHeight(wrapper.offsetHeight);
+  canvas.renderAll();
+  gridSize = wrapper.offsetWidth;
+  updateGrid(grid);
+}
+resizeCanvas();
 
 function View2Model() {
   return edges.map(function(e) {
@@ -85,7 +96,20 @@ function serializeAndRender() {
   es.forEach(function(e) {
     edges.push(e);
     canvas.add(e);
-  })
+  });
+}
+
+function renderView(view) {
+  var vs = view.vertices;
+  var es = view.edges;
+  vs.forEach(function(v) {
+    vertices.push(v);
+    canvas.add(v);
+  });
+  es.forEach(function(e) {
+    edges.push(e);
+    canvas.add(e);
+  });
 }
 
 Math.dist=function(x1,y1,x2,y2){
@@ -180,7 +204,6 @@ function drawGrid() {
     canvas.sendToBack(row);
   }
 }
-drawGrid();
 
 function clearGrid() {
   for (var i = 0; i < gridLines.length; i++) {
@@ -307,3 +330,26 @@ wrapper.addEventListener('keydown', function(e) {
   }
   return false;
 });
+
+
+
+
+
+
+
+
+// API CALLS HERE WOOOOOOOO
+function save() {
+  model = View2Model();
+
+  $.ajax({
+    type: 'POST',
+    data: model,
+    dataType: 'application/json',
+    success: saveCallback
+  });
+}
+
+function saveCallback(data) {
+  
+}
