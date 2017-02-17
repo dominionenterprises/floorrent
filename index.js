@@ -338,8 +338,8 @@ io.on('connection', function(socket) {
 
   socket.on('save', function(data) {
     var content = JSON.stringify(data.content);
-    var icons = JSON.stringify(req.body.icons);
-    var labels = JSON.stringify(req.body.labels);
+    var icons = JSON.stringify(data.icons);
+    var labels = JSON.stringify(data.labels);
     var name = data.name;
     var thumbnail = data.thumbnail;
     var id = data.id;
