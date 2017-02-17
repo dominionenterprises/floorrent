@@ -141,14 +141,30 @@ function loadAvailableFloorplans(){
     }
   });
   
+  pane = document.createElement("div");
+  pane.setAttribute("class", "floorplan-pane");
+  border = document.createElement("div");
+  border.setAttribute("class", "thumb-border");
+  thumb = document.createElement("div");
+  thumb.setAttribute("class", "newfloorplan-thumb");
+  border.appendChild(thumb);
+  pane.appendChild(border);
+  floorplanScroll.appendChild(pane);
+  pane.addEventListener("click", handleNewFloorplanPaneClick);
+  
   //TODO: Add 'create new' button
 }
 
 function handleFloorplanPaneClick(e){
   var currfpid = this.getAttribute("data-id");
   console.log(currfpid);
-  floorplanId = currfpid;
+  floorplan.id = currfpid;
   load();
+  closeSelectionBox();
+}
+
+function handleNewFloorplanPaneClick(e){
+  console.log("NEW FLOORPLAN");
   closeSelectionBox();
 }
 

@@ -11,15 +11,14 @@
 
       <div class="menu">
 
-      	<h2 class="icon-box-label">Draw Walls</h2>
-		<div class="menu-button big-menu-button"></div>
+		
+		<div class="menu-button"><img style="width: 45px" src="images/hand-move.svg"></img></div>
+		<div class="menu-button"><img style="width: 45px" src="images/line.svg"></img></div>
+		<div class="menu-button" id="placeTextButton"><img class="text-icon" src="images/text.svg"></div>
 
-		<h2 class="icon-box-label">Place Text</h2>
-		<div class="menu-button big-menu-button" id="placeTextButton"></div>
+		<h2 class="icon-box-label">Grid Granularity</h2>
+		<div class="slider" id="slider"></div>
 
-		<h2 class="icon-box-label">Place Doors and Windows</h2>
-		<div class="menu-button"></div>
-		<div class="menu-button"></div>
 
         <h2 class="icon-box-label">Place Furniture</h2>
         <div class="furniture-box">
@@ -151,6 +150,22 @@
           <div class="icon-row">
             <div class="icon">
 
+              <p class="icon-text">Door</p>
+              <img class="icon-image" src="images/door.svg">
+
+            </div>
+
+            <div class="icon">
+
+              <p class="icon-text">Window</p>
+              <img class="icon-image" src="images/window.svg">
+
+            </div>
+          </div>
+
+          <div class="icon-row">
+            <div class="icon">
+
               <p class="icon-text">Stove</p>
               <img class="icon-image" src="images/stove.svg">
 
@@ -258,6 +273,9 @@
 
 
   <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
+  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+  <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+  <link rel="stylesheet" href="/resources/demos/style.css">
   <script src="socket.io.min.js"></script>
   <script src="fabric.min.js"></script>
   <script src="client.js"></script>
