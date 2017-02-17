@@ -298,7 +298,7 @@ function other(vert, edge) {
 canvas.on('object:moving', function(options) {
   var obj = options.target;
 
-  if (obj.type === 'icon') {
+  if (obj.type === 'icon' || obj.isIcon)  {
     if (obj.isFixture && !isAdmin) return;
     scheduleSave();
   }
@@ -378,7 +378,7 @@ wrapper.addEventListener('keydown', function(e) {
     scheduleSave();
     if (obj.type === 'label') {
       delete labels[obj.id];
-    } else if (obj.type === 'icon') {
+    } else if (obj.type === 'icon' || obj.isIcon) {
       delete icons[obj.id];
     } else if (obj.type === 'vertex') {
       vertices = vertices.filter(function(el) {
@@ -490,15 +490,18 @@ function Icons2Model() {
   var data = [];
   for (var key in icons) {
     var icon = icons[key];
+    var path = icon.url.match(/^(https?\:)\/\/(([^:\/?#]*)(?:\:([0-9]+))?)([\/]{0,1}[^?#]*)(\?[^#]*|)(#.*|)$/)[5];
+    console.log(path);
     data.push({
-      url: icon.url,
+      url: path,
       angle: icon.getAngle(),
       top: icon.top,
       left: icon.left,
       scaleX: icon.scaleX,
       scaleY: icon.scaleY,
       width: icon.getWidth(),
-      height: icon.getHeight()
+      height: icon.getHeight(),
+      isFixture: icon.isFixture
     });
   }
   return data;
@@ -530,7 +533,8 @@ function loadIcon(model, i) {
     var id = iconId++;
     obj.id = id;
     obj.url = icon.url;
-    obj.type = 'icon';
+    obj.isIcon = true;
+    obj.isFixture = icon.isFixture;
     icons[id] = obj;
     canvas.add(obj).renderAll();
     loadIcon(model, ++i);
@@ -579,10 +583,8 @@ function loadCallback(data) {
 
   var view = Model2View(model);
   renderView(view);
-  view = Model2Icons(icons);
-  //renderView(view);
-  view = Model2Labels(labels);
-  //renderView(view);
+  Model2Icons(icons);
+  Model2Labels(labels);
 
 }
 
