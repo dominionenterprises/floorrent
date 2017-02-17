@@ -49,9 +49,10 @@ function loginButtonClick(e){
   var username = usernameField.value;
   var password = passwordField.value;
   $.post(apihost + "/login", {
-    "username": "DonutGaz",
-    "password": "testpass01"
+    username: username,
+    password: password
   }, function(data){
+    console.log(data);
     if (data.status == 200)
       closeLoginBox();
     else
@@ -74,8 +75,8 @@ function registerButtonClick(e){
   passwordField.style.background = "#FFFFFF";
   rpasswordField.style.background = "#FFFFFF";
   $.post(apihost + "/register", {
-    "username": "DonutGaz3",
-    "password": "testpass01"
+    username: username,
+    password: password
   }, function(data){
     console.log(data);
     if (data.status == 200)
