@@ -172,6 +172,9 @@ function loadAvailableFloorplans(){
 function handleFloorplanPaneClick(e){
   var currfpid = this.getAttribute("data-id");
   console.log(currfpid);
+  var ptag = this.getElementsByClassName("floorplan-name")[0];
+  currFloorplanName = ptag.innerHTML;
+  console.log(currFloorplanName);
   floorplan.id = currfpid;
   load();
   closeSelectionBox();
