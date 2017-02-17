@@ -89,10 +89,10 @@ app.post("/register", function(req, res){
       }
       bcrypt.hash(password, saltRounds, function(err, hash) {
         console.log(hash.length);
-        client.query("INSERT INTO users (username, password, access) VALUES($1, $2, 2)", [username, hash], function(err, result) {
-          console.log("NEW USER");
+        client.query("INSERT INTO users (uuid, username, password, access) VALUES(DEFAULT, $1, $2, 2) RETURNING uuid", [username, hash], function(err, result) {
+          uuid = result.rows[0].uuid;
           if (err) console.log(err);
-          res.send(result);
+          res.send({status: 200, message:{uuid:uuid}});
         });
       });
     });
