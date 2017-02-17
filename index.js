@@ -163,12 +163,14 @@ app.post("/floorplan/", function(req, res){
 
 app.post("/floorplan/:id", function(req, res){
   content = req.body.content;
+  name = req.body.name;
+  thumbnail = req.body.thumbnail;
   id = parseInt(req.params.id);
   pool.connect(function(err, client, done) {
     if(err) {
       return console.error('error fetching client from pool', err);
     }
-    client.query("UPDATE floorplans SET content=$1 WHERE fpid=$2", [content, id], function(err, result) {
+    client.query("UPDATE floorplans SET content=$1, name=$2, thumbnail=$3 WHERE fpid=$4", [content, name, thumbnail, id], function(err, result) {
       if(err) {
         return console.error('error running query', err);
       }
