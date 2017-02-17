@@ -330,11 +330,22 @@ pre {
   background:white;
 }
 
+
 .newfloorplan-thumb {
-  width: 108px;
-  height: 108px;
-  margin: auto;
-  margin-top: 10px;
+  font-size: 108px;
+  color: #555;
+  transition: color ease .1s, background ease .1s;
+}
+
+.newfloorplan-thumb {
+  font-size: 108px;
+  color: #555;
+}
+
+.newfloorplan-thumb:hover {
+  font-size: 108px;
+  color: white;
+  background: #014876;
 }
 
 .floorplan-name, .floorplan-creator {
