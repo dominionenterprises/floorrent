@@ -511,6 +511,8 @@ function Model2Icons(model) {
 }
 
 function loadIcon(model, i) {
+  if (!model)
+    return;
   if (i >= model.length)
     return;
   var icon = model[i];
