@@ -6,7 +6,7 @@ body {
 }
 
 .header {
-        top: 0px;
+    top: 0px;
 	background-color: #014876;
 	height: 65px;
 	width: 100%;
@@ -18,13 +18,20 @@ body {
 }
 
 .menu-button {
-	width: 130px;
+	width: 83px;
 	height: 45px;
-	margin: 5 0 0 10;
+	margin: 22 0 0 10;
 	box-shadow: 1px 1px 4px grey;
 	border-radius: 7px;
 	background-color: #E7E7E7;
 	display: inline-block;
+	text-align: center;
+}
+
+.text-icon {
+	width: 30px; 
+	position: fixed; 
+	margin: 5 0 0 -15; 
 }
 
 .big-menu-button {
@@ -62,7 +69,7 @@ body {
 }
 
 .fixtures-box {
-	height: 200px;
+	height: 38%;
 	width: 90%;
 	background-color: #E7E7E7;
 	overflow-y: scroll;
@@ -73,7 +80,7 @@ body {
 }
 
 .furniture-box {
-	height: 200px;
+	height: 38%;
 	width: 90%;
 	background-color: #E7E7E7;
 	overflow-y: scroll;
