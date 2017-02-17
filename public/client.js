@@ -1,4 +1,5 @@
 var apihost = "https://brainstorm-backend.herokuapp.com";
+var isAdmin = false;
 
 function closeLoginBox(){
   var loginBox = document.getElementById("login");
@@ -20,12 +21,17 @@ function openSelectionBox(){
 }
 
 function closeSelectionBox(){
-  var mainContainer = document.getElementById("main-container");
   var selectionBox = document.getElementById("selection-box");
+  setTimeout(function(){
+    selectionBox.style.display = "none";
+  }, 250);
+}
+
+function resetMainContainer(){
+  var mainContainer = document.getElementById("main-container");
   var loginSheet = document.getElementById("login-sheet");
   mainContainer.style.filter = "blur(0px) saturate(1)";
   setTimeout(function(){
-    selectionBox.style.display = "none";
     loginSheet.style.display = "none";
   }, 250);
 }
@@ -71,10 +77,12 @@ function loginButtonClick(e){
     username: username,
     password: password
   }, function(data){
-    if (data.status == 200)
+    if (data.status == 200){
+      isAdmin = true;
       closeLoginBox();
-    else
+    } else {
       makeLoginRed();
+    }
   });
 }
 
@@ -97,10 +105,12 @@ function registerButtonClick(e){
     password: password
   }, function(data){
     console.log(data);
-    if (data.status == 200)
+    if (data.status == 200){
       closeLoginBox();
-    else
+      isAdmin = true;
+    } else {
       makeRegisterRed();
+    }
   });
 }
 
@@ -147,12 +157,11 @@ function loadAvailableFloorplans(){
   border.setAttribute("class", "thumb-border");
   thumb = document.createElement("div");
   thumb.setAttribute("class", "newfloorplan-thumb");
+  thumb.innerHTML = "+";
   border.appendChild(thumb);
   pane.appendChild(border);
   floorplanScroll.appendChild(pane);
   pane.addEventListener("click", handleNewFloorplanPaneClick);
-  
-  //TODO: Add 'create new' button
 }
 
 function handleFloorplanPaneClick(e){
@@ -161,11 +170,25 @@ function handleFloorplanPaneClick(e){
   floorplan.id = currfpid;
   load();
   closeSelectionBox();
+  resetMainContainer();
 }
 
 function handleNewFloorplanPaneClick(e){
   console.log("NEW FLOORPLAN");
-  closeSelectionBox();
+  //TODO: Bring up a name box
+  setTimeout(openNameBox, 250);
+}
+
+function openNameBox(){
+  var nameBox = document.getElementById("newname-box");
+  nameBox.style.display = "inherit";
+  setTimeout(function(){
+    nameBox.style.opacity = "1";
+  }, 10);
+}
+
+function closeNameBox(){
+  resetMainContainer();
 }
 
 function pageRefresh(){

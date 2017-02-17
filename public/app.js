@@ -291,7 +291,12 @@ function other(vert, edge) {
 }
 
 canvas.on('object:moving', function(options) {
-  if (options.target.type === 'vertex') {
+  var obj = options.target;
+  if (obj.type === 'vertex' || obj.type === 'icon') {
+    scheduleSave();
+  }
+
+  if (obj.type === 'vertex') {
     var vert = options.target;
 
     // snap to grid
@@ -358,6 +363,7 @@ wrapper.addEventListener('keydown', function(e) {
     canvas.deactivateAll();
   } else if (e.key == 'Backspace') {
     var obj = canvas.getActiveObject();
+    scheduleSave();
     if (obj.type === 'label') {
       delete labels[obj.id];
     } else if (obj.type === 'icon') {
@@ -395,7 +401,7 @@ function attachClickHandlers() {
   var imgs = document.getElementsByClassName('icon-image');
   for (var i = 0; i < imgs.length; i++) {
     var img = imgs[i];
-    img.onclick = addIcon.bind(this, img.src);
+    img.onclick = addIcon.bind(this, img.src, $(img).hasClass('fixture'));
   }
   var placeTextButton = document.getElementById('placeTextButton');
   placeTextButton.onclick = addLabel;
@@ -446,13 +452,22 @@ var iconId = 0;
 
 var icons = {};
 
-function addIcon(url) {
+function addIcon(url, isFixture) {
   fabric.loadSVGFromURL(url, function(objects, options) {
     var obj = fabric.util.groupSVGElements(objects, options);
     var id = iconId++;
     obj.id = id;
+    obj.isFixture = isFixture;
     obj.url = url;
     icons[id] = obj;
+    if (!isAdmin && isFixture) {
+      obj.lockMovementX = true;
+      obj.lockMovementY = true;
+      obj.lockScalingX = true;
+      obj.lockScalingY = true;
+      obj.lockUniScaling = true;
+      obj.lockRotation = true;
+    }
     canvas.add(obj).renderAll();
   });
 }
@@ -538,7 +553,6 @@ function loadCallback(data) {
   floorplan.id = data.fpid;
   floorplan.created = true;
   floorplan.name = data.name;
-  floorplan.id = data.id;
 
   var view = Model2View(model);
   renderView(view);
@@ -578,11 +592,10 @@ var socket = io();
 
 function scheduleSave() {
   saveInterval = MAX_SAVE_INTERVAL;
-  console.log('saving after 5 seconds of inactivity...');
 }
 
 var saveInterval = 0;
-var MAX_SAVE_INTERVAL = 5;
+var MAX_SAVE_INTERVAL = 3;
 function checkForSave() {
   if (saveInterval == 1) {
     console.log('saving');
@@ -594,6 +607,8 @@ function checkForSave() {
 setInterval(checkForSave, 1000);
 
 
+
+// SLIDER
 $(function() {
   var handle = $( "#custom-handle" );
   $("#slider").slider({
@@ -622,10 +637,14 @@ $(function() {
 });
 
 var lineDrawingMode = true;
+$("#placeLineButton").toggleClass('depressed');
 
 
 function activateLineDrawingMode(){
-  $("#placeLineButton").toggleClass('depressed');
+  if (!lineDrawingMode) {
+    $("#placeLineButton").toggleClass('depressed');
+    lineDrawingMode = true;
+  }
 }
 
 
@@ -633,8 +652,11 @@ function toggleLineDrawing(){
   if (lineDrawingMode) {
     clearTempLine();
     canvas.deactivateAll();
+    $("#placeLineButton").toggleClass('depressed');
+    lineDrawingMode = false
   } else {
-    $("#placeLineButton").mousedown();
+    $("#placeLineButton").toggleClass('depressed');
+    lineDrawingMode = true;
   }
-  lineDrawingMode = !lineDrawingMode;
+  
 }

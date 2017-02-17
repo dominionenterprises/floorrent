@@ -11,7 +11,7 @@
 
       <div class="menu">
 
-		
+
 		<div class="menu-button"><img style="width: 45px" src="images/hand-move.svg"></img></div>
 		<div class="menu-button" id="placeLineButton" onclick="toggleLineDrawing()"><img style="width: 45px" src="images/line.svg"></img></div>
 		<div class="menu-button" id="placeTextButton"><img class="text-icon" src="images/text.svg"></div>
@@ -153,14 +153,14 @@
             <div class="icon">
 
               <p class="icon-text">Door</p>
-              <img class="icon-image" src="images/door.svg">
+              <img class="icon-image fixture" src="images/door.svg">
 
             </div>
 
             <div class="icon">
 
               <p class="icon-text">Window</p>
-              <img class="icon-image" src="images/window.svg">
+              <img class="icon-image fixture" src="images/window.svg">
 
             </div>
           </div>
@@ -169,14 +169,14 @@
             <div class="icon">
 
               <p class="icon-text">Stove</p>
-              <img class="icon-image" src="images/stove.svg">
+              <img class="icon-image fixture" src="images/stove.svg">
 
             </div>
 
             <div class="icon">
 
               <p class="icon-text">Fridge</p>
-              <img class="icon-image" src="images/fridge.svg">
+              <img class="icon-image fixture" src="images/fridge.svg">
 
             </div>
           </div>
@@ -185,14 +185,14 @@
             <div class="icon">
 
               <p class="icon-text">Toilet</p>
-              <img class="icon-image" src="images/toilet.svg">
+              <img class="icon-image fixture" src="images/toilet.svg">
 
             </div>
 
             <div class="icon">
 
               <p class="icon-text">Sink</p>
-              <img class="icon-image" src="images/sink.svg">
+              <img class="icon-image fixture" src="images/sink.svg">
 
             </div>
           </div>
@@ -201,14 +201,14 @@
             <div class="icon">
 
               <p class="icon-text">Sink</p>
-              <img class="icon-image" src="images/sink2.svg">
+              <img class="icon-image fixture" src="images/sink2.svg">
 
             </div>
 
             <div class="icon">
 
               <p class="icon-text">Sink</p>
-              <img class="icon-image" src="images/sink3.svg">
+              <img class="icon-image fixture" src="images/sink3.svg">
 
             </div>
           </div>
@@ -217,13 +217,13 @@
             <div class="icon">
 
               <p class="icon-text">Stove Hood</p>
-              <img class="icon-image" src="images/stovehood.svg">
+              <img class="icon-image fixture" src="images/stovehood.svg">
 
             </div>
 
             <div class="icon">
               <p class="icon-text">Electric Stove</p>
-              <img class="icon-image" src="images/electricstove.svg">
+              <img class="icon-image fixture" src="images/electricstove.svg">
             </div>
 
           </div>
@@ -265,11 +265,12 @@
     <div id="selection-box">
       <h1>Select Your Floorplan</h1>
       <div id="floorplan-scroll">
-        
+
       </div>
-    </div>
-    <div id="selection-box">
-      <h1>Select Your Floorplan</h1>
+      <div id="newname-box">
+        <h1>Enter a name</h1>
+        <input id="newfpname" type="text" placeholder="Floorplan Name"><a class="button" id="newsubmit">Submit</a>
+      </div>
     </div>
   </div>
 
@@ -277,7 +278,6 @@
   <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
   <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
   <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-  <link rel="stylesheet" href="/resources/demos/style.css">
   <script src="socket.io.min.js"></script>
   <script src="fabric.min.js"></script>
   <script src="client.js"></script>
