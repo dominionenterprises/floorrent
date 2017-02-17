@@ -145,8 +145,9 @@ function loadAvailableFloorplans(){
   pane.setAttribute("class", "floorplan-pane");
   border = document.createElement("div");
   border.setAttribute("class", "thumb-border");
-  thumb = document.createElement("div");
+  thumb = document.createElement("img");
   thumb.setAttribute("class", "newfloorplan-thumb");
+  thumb.setAttribute("src", "/public/images/plus.png");
   border.appendChild(thumb);
   pane.appendChild(border);
   floorplanScroll.appendChild(pane);
