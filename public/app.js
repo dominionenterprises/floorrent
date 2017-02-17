@@ -401,7 +401,7 @@ function attachClickHandlers() {
   var imgs = document.getElementsByClassName('icon-image');
   for (var i = 0; i < imgs.length; i++) {
     var img = imgs[i];
-    img.onclick = addIcon.bind(this, img.src);
+    img.onclick = addIcon.bind(this, img.src, $(img).hasClass('fixture'));
   }
   var placeTextButton = document.getElementById('placeTextButton');
   placeTextButton.onclick = addLabel;
@@ -452,11 +452,12 @@ var iconId = 0;
 
 var icons = {};
 
-function addIcon(url) {
+function addIcon(url, isFixture) {
   fabric.loadSVGFromURL(url, function(objects, options) {
     var obj = fabric.util.groupSVGElements(objects, options);
     var id = iconId++;
     obj.id = id;
+    obj.isFixture = isFixture;
     obj.url = url;
     icons[id] = obj;
     canvas.add(obj).renderAll();
