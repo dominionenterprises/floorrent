@@ -1,12 +1,32 @@
 var apihost = "https://brainstorm-backend.herokuapp.com";
 
 function closeLoginBox(){
-  var loginSheet = document.getElementById("login-sheet");
-  loginSheet.style.opacity = "0";
-  loginSheet.style.top = "-5vh";
+  var loginBox = document.getElementById("login");
+  loginBox.style.opacity = "0";
+  loginBox.style.marginTop = "20vh";
+  setTimeout(function(){
+    loginBox.style.display = "none";
+    openSelectionBox();
+  }, 250);
+}
+
+function openSelectionBox(){
+  var selectionBox = document.getElementById("selection-box");
+  selectionBox.style.display = "inherit";
+  setTimeout(function(){
+    selectionBox.style.opacity = "1";
+    selectionBox.style.marginTop = "19vh";
+    closeSelectionBox();
+  }, 10);
+}
+
+function closeSelectionBox(){
   var mainContainer = document.getElementById("main-container");
+  var selectionBox = document.getElementById("selection-box");
+  var loginSheet = document.getElementById("login-sheet");
   mainContainer.style.filter = "blur(0px) saturate(1)";
   setTimeout(function(){
+    selectionBox.style.display = "none";
     loginSheet.style.display = "none";
   }, 250);
 }
@@ -52,7 +72,6 @@ function loginButtonClick(e){
     username: username,
     password: password
   }, function(data){
-    console.log(data);
     if (data.status == 200)
       closeLoginBox();
     else
@@ -91,7 +110,6 @@ function guestButtonClick(e){
 }
 
 function adminButtonClick(e){
-  console.log("ADMIN");
   openAdminContainer();
 }
 
