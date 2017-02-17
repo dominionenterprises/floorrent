@@ -512,7 +512,7 @@ function loadIcon(model, i) {
 // API CALLS HERE WOOOOOOOO
 function create() {
   var model = View2Model();
-  var name = 'test name';
+  var name = currFloorplanName;
   var tempcanvas = document.getElementById("c");
   var thumbnail = tempcanvas.toDataURL("image/png");
 
