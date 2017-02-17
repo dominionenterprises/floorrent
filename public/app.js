@@ -1,9 +1,17 @@
 "use strict";
 
 // user
-var userId = 2;
-var floorplanId;
-var floorplanName;
+var user = {
+  id: 2,
+  name: 'Please log in.'
+};
+
+// floorplan
+var floorplan = {
+  id: null,
+  name: null,
+  created: false
+};
 
 var apihost = "https://brainstorm-backend.herokuapp.com";
 
@@ -366,7 +374,7 @@ function create() {
     url: apihost + '/floorplan',
     type: 'POST',
     data: {
-      creator: userId,
+      creator: user.id,
       name: name,
       content: model,
       thumbnail: "..."
@@ -376,13 +384,13 @@ function create() {
 }
 function createCallback(data) {
   console.log(data);
-  floorplanId = data.fpid;    
-  console.log('created ' + floorplanId);
+  floorplan.id = data.fpid;    
+  console.log('created ' + floorplan.id);
 }
 
 function load() {
   $.ajax({
-    url: apihost + '/floorplan/' + floorplanId,
+    url: apihost + '/floorplan/' + floorplan.id,
     type: 'GET',
     success: loadCallback
   });
@@ -391,7 +399,7 @@ function loadCallback(data) {
   console.log(data);
   var model = JSON.parse(data.content);
   console.log(model);
-  floorplanName = data.name;
+  floorplan.name = data.name;
   
   var view = Model2View(model);
   renderView(view);
@@ -401,10 +409,10 @@ function save() {
   var model = View2Model();
 
   $.ajax({
-    url: apihost + '/floorplan/' + floorplanId,
+    url: apihost + '/floorplan/' + floorplan.id,
     type: 'POST',
     data: {
-      creator: userId,
+      creator: user.id,
       name: name,
       content: model,
       thumbnail: "..."
