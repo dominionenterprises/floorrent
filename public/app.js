@@ -584,11 +584,10 @@ var socket = io();
 
 function scheduleSave() {
   saveInterval = MAX_SAVE_INTERVAL;
-  console.log('saving after 5 seconds of inactivity...');
 }
 
 var saveInterval = 0;
-var MAX_SAVE_INTERVAL = 5;
+var MAX_SAVE_INTERVAL = 3;
 function checkForSave() {
   if (saveInterval == 1) {
     console.log('saving');
@@ -599,6 +598,9 @@ function checkForSave() {
 }
 setInterval(checkForSave, 1000);
 
+
+
+// SLIDER
 $(function() {
   $("#slider").slider({
     value:1,
