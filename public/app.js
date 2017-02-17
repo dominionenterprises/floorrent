@@ -261,6 +261,8 @@ canvas.add(new fabric.Line([], {
 
 // create new lines
 canvas.on('mouse:down', function(options) {
+  if (!lineDrawingMode)
+    return;
   // complete a line or start a new one
   if (!options.target || !options.target.selectable) {
     var x = roundToGrid(options.e.offsetX);
@@ -518,8 +520,6 @@ function loadIcon(model, i) {
   });
 }
 
-
-
 // API CALLS HERE WOOOOOOOO
 function create() {
   var model = View2Model();
@@ -659,26 +659,11 @@ $(function() {
 });
 
 var lineDrawingMode = true;
+
 $("#placeLineButton").toggleClass('depressed');
 
+$("#placeLineButton").click(function() {
+  $(this).toggleClass('depressed');
+  lineDrawingMode = !lineDrawingMode;
+});
 
-function activateLineDrawingMode(){
-  if (!lineDrawingMode) {
-    $("#placeLineButton").toggleClass('depressed');
-    lineDrawingMode = true;
-  }
-}
-
-
-function toggleLineDrawing(){
-  if (lineDrawingMode) {
-    clearTempLine();
-    canvas.deactivateAll();
-    $("#placeLineButton").toggleClass('depressed');
-    lineDrawingMode = false
-  } else {
-    $("#placeLineButton").toggleClass('depressed');
-    lineDrawingMode = true;
-  }
-
-}

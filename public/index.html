@@ -16,9 +16,15 @@
       <div class="menu">
 
 
-		<div class="menu-button"><img style="width: 45px" src="images/hand-move.svg"></img></div>
-		<div class="menu-button" id="placeLineButton" onclick="toggleLineDrawing()"><img style="width: 45px" src="images/line.svg"></img></div>
-		<div class="menu-button" id="placeTextButton"><img class="text-icon" src="images/text.svg"></div>
+		<div class="menu-button" id="panButton">
+      <img  style="width: 45px" src="images/hand-move.svg"></img>
+    </div>
+		<div class="menu-button" id="placeLineButton">
+      <img style="width: 45px" src="images/line.svg"></img>
+    </div>
+		<div class="menu-button" id="placeTextButton">
+      <img class="text-icon" src="images/text.svg">
+    </div>
 
 		<h2 class="icon-box-label">Grid Granularity</h2>
 		<div class="slider" id="slider">
@@ -234,7 +240,7 @@
         </div>
       </div>
 
-      <div id="canvasWrapper" onfocus="activateLineDrawingMode()">
+      <div id="canvasWrapper">
         <canvas id="c"></canvas>
       </div>
     </div>
