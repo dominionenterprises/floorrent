@@ -291,7 +291,12 @@ function other(vert, edge) {
 }
 
 canvas.on('object:moving', function(options) {
-  if (options.target.type === 'vertex') {
+  var obj = options.target;
+  if (obj.type === 'vertex' || obj.type === 'icon') {
+    scheduleSave();
+  }
+
+  if (obj.type === 'vertex') {
     var vert = options.target;
 
     // snap to grid
@@ -358,6 +363,7 @@ wrapper.addEventListener('keydown', function(e) {
     canvas.deactivateAll();
   } else if (e.key == 'Backspace') {
     var obj = canvas.getActiveObject();
+    scheduleSave();
     if (obj.type === 'label') {
       delete labels[obj.id];
     } else if (obj.type === 'icon') {
